@@ -31,4 +31,10 @@ class HelloController extends Controller
 
         return ExitCode::OK;
     }
+
+    public function actionRegister($username, $email, $password)
+    {
+        \Yii::$app->get('userService')->register($username, $email, $password);
+        return ExitCode::OK;
+    }
 }

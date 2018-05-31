@@ -25,6 +25,9 @@ $config = [
             ],
         ],
         'db' => $db,
+        'userService' => [
+            'class' => '\app\services\UserService',
+        ],
     ],
     'params' => $params,
     /*

@@ -125,4 +125,15 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    public function actionTestAdminlte()
+    {
+        return $this->render('test-adminlte');
+    }
+
+    public function actionBox()
+    {
+        sleep(2);
+        return 'name: '.Yii::$app->getRequest()->get('name').', time: '.date('Y-m-d H-i-s');
+    }
 }

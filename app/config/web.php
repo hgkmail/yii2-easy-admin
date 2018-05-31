@@ -11,6 +11,8 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'language' => 'zh-CN',
+    'timezone' => 'Asia/Shanghai',
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
@@ -20,6 +22,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
+//            'identityClass' => 'app\models\StaticUser',
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
@@ -43,14 +46,12 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
         'view' => [
         ],
         'assetManager' => [
@@ -59,6 +60,25 @@ $config = [
                     'skin' => 'skin-blue',
                 ],
             ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+//                    'basePath' => '@app/messages',
+                    //'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
+        'userService' => [
+            'class' => '\app\services\UserService',
+        ],
+        'mainMenuService' => [
+            'class' => '\app\services\MainMenuService'
         ],
     ],
     'params' => $params,
@@ -78,6 +98,14 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         //'allowedIPs' => ['127.0.0.1', '::1'],
+        'generators' => [
+            'crud' => [
+                'class' => 'yii\gii\generators\crud\Generator',
+                'templates' => [
+                    'AdminLTE' => '@vendor/dmstr/yii2-adminlte-asset/gii/templates/crud/simple',
+                ]
+            ]
+        ],
     ];
 }
 

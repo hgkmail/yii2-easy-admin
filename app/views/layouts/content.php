@@ -25,6 +25,7 @@ use dmstr\widgets\Alert;
         Breadcrumbs::widget(
             [
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                'options' => ['class' => 'breadcrumb', 'style' => 'font-size:14px'],
             ]
         ) ?>
     </section>

@@ -19,6 +19,7 @@ class UserService extends Component
      * @param $username
      * @param $email
      * @param $password
+     * @return User
      * @throws
      */
     public function register($username, $email, $password)
@@ -31,5 +32,19 @@ class UserService extends Component
         $newUser->auth_key = \Yii::$app->getSecurity()->generateRandomString(8);
         $newUser->status = User::STATUS_ENABLED;
         $newUser->save();
+        return $newUser;
     }
+
+    /**
+     * Check if username exists
+     * @param $username
+     * @return boolean
+     */
+    public function exist($username)
+    {
+        $count = User::find()->where(['username' => $username])->count();
+        return $count > 0;
+    }
+
+
 }

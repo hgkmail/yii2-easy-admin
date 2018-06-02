@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\form\RegisterForm;
+use app\services\OptionService;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
+use yii\base\InvalidArgumentException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -35,12 +38,16 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+        $optionService = Yii::$app->get('optionService');
+        $gridSetting = $optionService->getGridCols(Yii::$app->requestedRoute);
+
         $searchModel = new UserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'gridSetting' => $gridSetting,
         ]);
     }
 
@@ -48,6 +55,7 @@ class UserController extends Controller
      * Displays a single User model.
      * @param integer $id
      * @return mixed
+     * @throws
      */
     public function actionView($id)
     {
@@ -63,10 +71,11 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $model = new User();
+        $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_CREATE]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->validateUsername()) {
+            $newUser = $model->createUser();
+            return $this->redirect(['view', 'id' => $newUser->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -79,13 +88,17 @@ class UserController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $user = $this->findModel($id);
+        $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_UPDATE]);
+        $model->setUser($user);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->validateUsername()) {
+            $model->updateUser();
+            return $this->redirect(['view', 'id' => $model->getUser()->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -98,11 +111,22 @@ class UserController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws
      */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
+        return $this->redirect(['index']);
+    }
+
+    public function actionDeleteBatch()
+    {
+        $ids = Yii::$app->request->get('ids');
+        if ($ids == null) {
+            throw new InvalidArgumentException('ids is null');
+        }
+        User::deleteAll(['in', 'id', $ids]);
         return $this->redirect(['index']);
     }
 

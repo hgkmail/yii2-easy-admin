@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\base\ExceptionFilter;
+use app\models\form\RegisterForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -35,6 +37,10 @@ class SiteController extends Controller
                     'logout' => ['post'],
                 ],
             ],
+            'exceptionFilter' => [
+                'class' => ExceptionFilter::className(),
+                'only' => ['error'],
+            ]
         ];
     }
 
@@ -50,6 +56,9 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'grid-setting' => [
+                'class' => 'app\base\GridSettingAction',
             ],
         ];
     }
@@ -129,6 +138,21 @@ class SiteController extends Controller
     public function actionTestAdminlte()
     {
         return $this->render('test-adminlte');
+    }
+
+    public function actionRegister()
+    {
+        $model  = new RegisterForm(['scenario' => RegisterForm::SCENARIO_REGISTER]);
+        if($model->load(Yii::$app->request->post()) && $model->validate() && $model->validateUsername()) {
+            $model->register();
+            $this->redirect('login');
+        }
+        else {
+            $this->layout = 'main-login';
+            return $this->render('register', [
+                'model' => $model
+            ]);
+        }
     }
 
     public function actionBox()

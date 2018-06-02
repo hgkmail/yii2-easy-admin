@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -46,10 +47,11 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password_hash'], 'required'],
+            [['username', 'email'], 'required'],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'password_hash', 'password_reset_token', 'auth_key'], 'string', 'max' => 255],
             [['username'], 'unique'],
+            ['email', 'email'],
         ];
     }
 
@@ -78,6 +80,14 @@ class User extends ActiveRecord implements IdentityInterface
     public static function find()
     {
         return new UserQuery(get_called_class());
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getOptions()
+    {
+        return $this->hasMany(Option::className(), ['user_id' => 'id'])->inverseOf('user');
     }
 
     /************************* IdentityInterface methods *************************/

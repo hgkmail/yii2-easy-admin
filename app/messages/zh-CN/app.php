@@ -17,13 +17,26 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Are you sure you want to delete this item?' => '',
     'Auth Key' => '',
+    'Create User' => '',
     'Created At' => '',
+    'Delete' => '',
     'Email' => '',
     'ID' => '',
+    'Key' => '',
     'Password Hash' => '',
     'Password Reset Token' => '',
+    'Reset' => '',
+    'Save' => '',
+    'Search' => '',
     'Status' => '',
+    'Type' => '',
+    'Update' => '',
+    'Update {modelClass}: ' => '',
     'Updated At' => '',
+    'User ID' => '',
     'Username' => '',
+    'Users' => '',
+    'Value' => '',
 ];

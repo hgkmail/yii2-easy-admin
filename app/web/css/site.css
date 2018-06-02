@@ -113,3 +113,24 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/* grid view */
+.grid-view .summary {
+    padding-left: 10px;
+    padding-bottom: 5px;
+}
+
+.grid-view .pagination {
+    padding-left: 10px;
+    margin: 5px 0;
+}
+
+
+
+
+
+
+
+
+
+

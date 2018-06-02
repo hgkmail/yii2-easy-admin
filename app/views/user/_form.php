@@ -1,10 +1,10 @@
 <?php
 
-use yii\helpers\Html;
+use yii\bootstrap\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\User */
+/* @var $model app\models\form\RegisterForm */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -16,17 +16,10 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'password')->textInput() ?>
 
-        <?= $form->field($model, 'password_reset_token')->textInput(['maxlength' => true]) ?>
-
-        <?= $form->field($model, 'auth_key')->textInput(['maxlength' => true]) ?>
-
-        <?= $form->field($model, 'status')->textInput() ?>
-
-        <?= $form->field($model, 'created_at')->textInput() ?>
-
-        <?= $form->field($model, 'updated_at')->textInput() ?>
+        <?= $form->field($model, 'status')->radioList([1 => 'Enabled', 2 => 'Disabled'],
+            ['itemOptions' => ['labelOptions' => ['class' => 'text-black']]]) ?>
 
     </div>
     <div class="box-footer">

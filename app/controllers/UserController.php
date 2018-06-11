@@ -3,7 +3,10 @@
 namespace app\controllers;
 
 use app\models\form\RegisterForm;
+use app\models\Role;
+use app\models\UserProfile;
 use app\services\OptionService;
+use dmstr\widgets\Alert;
 use Yii;
 use app\models\User;
 use app\models\search\UserSearch;
@@ -24,7 +27,7 @@ class UserController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -38,6 +41,7 @@ class UserController extends Controller
      */
     public function actionIndex()
     {
+        $roles = Role::find()->all();
         $optionService = Yii::$app->get('optionService');
         $gridSetting = $optionService->getGridCols(Yii::$app->requestedRoute);
 
@@ -48,6 +52,21 @@ class UserController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'gridSetting' => $gridSetting,
+            'roles' => $roles,
+        ]);
+    }
+
+    public function actionPick()  // don't need grid setting
+    {
+        $roles = Role::find()->all();
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $this->layout = 'main-pick';
+        return $this->render('pick', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'roles' => $roles,
         ]);
     }
 
@@ -59,8 +78,15 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $user = $this->findModel($id);
+        $userProfile = $user->userProfile;
+        if (empty($userProfile)) {
+           $userProfile = new UserProfile();
+           $userProfile->user_id = $user->id;
+        }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $user,
+            'userProfile' => $userProfile
         ]);
     }
 
@@ -72,13 +98,16 @@ class UserController extends Controller
     public function actionCreate()
     {
         $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_CREATE]);
+        $roles = Role::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->validateUsername()) {
             $newUser = $model->createUser();
+            Yii::$app->session->addFlash('success', "User $newUser->username is created successfully.");
             return $this->redirect(['view', 'id' => $newUser->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'roles' => $roles,
             ]);
         }
     }
@@ -93,15 +122,29 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $user = $this->findModel($id);
+        $roles = Role::find()->all();
         $model = new RegisterForm(['scenario' => RegisterForm::SCENARIO_UPDATE]);
         $model->setUser($user);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->validateUsername()) {
+        $userprofile = $user->getUserProfile()->one();
+        if (empty($userprofile)) {
+            $userprofile = new UserProfile();
+            $userprofile->user_id = $user->id;
+        }
+
+        $post = Yii::$app->request->post();
+        if ($model->load($post) && $userprofile->load($post)
+            && $model->validate() && $model->validateUsername() && $userprofile->validate()) {
+
             $model->updateUser();
+            $userprofile->save();
+            Yii::$app->session->addFlash('success', "User $user->username is updated successfully.");
             return $this->redirect(['view', 'id' => $model->getUser()->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'roles' => $roles,
+                'userprofile' => $userprofile,
             ]);
         }
     }
@@ -123,10 +166,14 @@ class UserController extends Controller
     public function actionDeleteBatch()
     {
         $ids = Yii::$app->request->get('ids');
-        if ($ids == null) {
-            throw new InvalidArgumentException('ids is null');
+        if (empty($ids)) {
+            throw new InvalidArgumentException('ids is empty');
         }
-        User::deleteAll(['in', 'id', $ids]);
+//        User::deleteAll(['in', 'id', $ids]);
+        foreach($ids as $id) {
+            $this->findModel($id)->delete();    // delete will trigger event, deleteAll will not.
+        }
+
         return $this->redirect(['index']);
     }
 

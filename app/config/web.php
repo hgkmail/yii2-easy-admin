@@ -61,6 +61,11 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            // uncomment if production
+            // 'cache' => 'cache',
+        ],
         'i18n' => [
             'translations' => [
                 'app*' => [

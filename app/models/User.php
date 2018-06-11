@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\base\UserBehavior;
 use Yii;
+use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -37,7 +39,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className()
+            TimestampBehavior::class,
+            UserBehavior::class
         ];
     }
 
@@ -87,7 +90,24 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getOptions()
     {
-        return $this->hasMany(Option::className(), ['user_id' => 'id'])->inverseOf('user');
+        return $this->hasMany(Option::class, ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getRole()
+    {
+        return $this->hasOne(Role::class, ['name' => 'item_name'])
+            ->viaTable('{{%auth_assignment}}', ['user_id' => 'id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getUserProfile()
+    {
+        return $this->hasOne(UserProfile::class, ['user_id' => 'id'])->inverseOf('user');
     }
 
     /************************* IdentityInterface methods *************************/
@@ -97,7 +117,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::find()->where(['id' => $id])->one();
+        return static::find()->where(['id' => $id])->active()->one();
     }
 
     /**
@@ -106,7 +126,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findIdentityByAccessToken($token, $type = null)
     {
         // TODO: Implement findIdentityByAccessToken() method.
-        throw new \Exception('Not Implemented');
+        throw new NotSupportedException();
     }
 
     /**
@@ -141,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::find()->where(['username' => $username])->one();
+        return static::find()->where(['username' => $username])->active()->one();
     }
 
     /**

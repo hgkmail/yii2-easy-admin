@@ -7,12 +7,13 @@ use yii\db\Migration;
  */
 class m180530_151123_create_user_table extends Migration
 {
+    const TABLE_NAME = '{{%user}}';
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%user}}', [
+        $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey(),
             'username' => $this->string(255)->unique()->notNull(),
             'email' => $this->string(),
@@ -30,6 +31,6 @@ class m180530_151123_create_user_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%user}}');
+        $this->dropTable(self::TABLE_NAME);
     }
 }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\base\ExceptionFilter;
+use app\base\UploadAction;
 use app\models\form\RegisterForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -11,6 +12,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -21,7 +23,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -32,13 +34,13 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
             ],
             'exceptionFilter' => [
-                'class' => ExceptionFilter::className(),
+                'class' => ExceptionFilter::class,
                 'only' => ['error'],
             ]
         ];
@@ -60,6 +62,9 @@ class SiteController extends Controller
             'grid-setting' => [
                 'class' => 'app\base\GridSettingAction',
             ],
+            'upload' => [
+                'class' => UploadAction::class,
+            ]
         ];
     }
 
@@ -137,6 +142,8 @@ class SiteController extends Controller
 
     public function actionTestAdminlte()
     {
+        Yii::$app->session->addFlash('info', "Your message to display");
+        Yii::$app->session->addFlash('error', "abc");
         return $this->render('test-adminlte');
     }
 
@@ -159,5 +166,13 @@ class SiteController extends Controller
     {
         sleep(2);
         return 'name: '.Yii::$app->getRequest()->get('name').', time: '.date('Y-m-d H-i-s');
+    }
+
+    public function actionUploadAvatar()
+    {
+        $file = UploadedFile::getInstanceByName('croppedImage');
+        if($file) {
+            $file->saveAs(Yii::getAlias('@webroot')."/upload/avatar/$file->baseName.$file->extension");
+        }
     }
 }

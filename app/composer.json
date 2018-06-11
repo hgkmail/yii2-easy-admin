@@ -18,7 +18,12 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0",
-        "dmstr/yii2-adminlte-asset": "^2.1"
+        "dmstr/yii2-adminlte-asset": "^2.1",
+        "2amigos/yii2-tinymce-widget": "~1.1",
+        "2amigos/yii2-ckeditor-widget": "^2.1",
+        "bizley/quill": "^2.0",
+        "kartik-v/yii2-widget-select2": "@dev",
+        "lavrentiev/yii2-toastr": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

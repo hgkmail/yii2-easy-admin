@@ -242,7 +242,7 @@ use yii\helpers\Html;
 
                             <p>
                                 <?= Yii::$app->user->isGuest?'Not Login':Yii::$app->user->getIdentity()->username ?>
-                                <small>Member since Nov. 2012</small>
+                                <small><?=Yii::$app->user->isGuest?'':Yii::$app->user->getIdentity()->role->name?></small>
                             </p>
                         </li>
                         <!-- Menu Body -->

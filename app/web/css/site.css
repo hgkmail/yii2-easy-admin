@@ -125,6 +125,86 @@ a.desc:after {
     margin: 5px 0;
 }
 
+/* toastr */
+#toast-container {
+    margin-top: 60px !important;  /* !important - override */
+}
+
+/* picker box */
+.box.picker {
+    margin-bottom: 0 !important;
+    border-top: 0 !important;
+}
+
+/* picker body */
+.login-page.picker {
+    background: white !important;
+}
+
+.box-no-shadow {
+    box-shadow: none !important;
+}
+
+/* iframe auto height */
+/* from http://www.bymichaellancaster.com/blog/fluid-iframe-and-images-without-javascript-plugins/ */
+.fluidMedia {
+    position: relative;
+    padding-bottom: 56.25%; /* proportion value to aspect ratio 16:9 (9 / 16 = 0.5625 or 56.25%) */
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+
+.fluidMedia iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* cropper */
+.crop-modal-container {
+    overflow: hidden;
+    max-height: 500px;
+}
+
+/* cropper preview */
+.crop-modal-preview {
+    border: 1px rgb(60, 141, 188) solid;
+    border-radius: 3px;
+}
+
+.crop-modal-preview:first-child {
+    margin-left: 30px;
+}
+
+.crop-modal-preview:not(:first-child) {
+    margin-left: 10px;
+}
+
+.crop-modal-preview:last-child {
+    margin-top: 10px;
+}
+
+.crop-modal-preview.md {
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+}
+
+.crop-modal-preview.sm {
+    overflow: hidden;
+    width: 75px;
+    height: 75px;
+}
+
+.crop-modal-preview.xs {
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+}
+
 
 
 

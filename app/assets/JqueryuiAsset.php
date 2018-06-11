@@ -19,6 +19,7 @@ class JqueryuiAsset extends AssetBundle
         'jquery-ui.min.js'
     ];
     public $depends = [
-        'dmstr\web\AdminLteAsset'
+        'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

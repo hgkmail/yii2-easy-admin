@@ -52,6 +52,8 @@ class MainMenuService extends Component
                 ],
             ],
             ['label' => 'Users', 'icon' => 'users', 'url' => '/user/index', 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Menus', 'icon' => 'bars', 'url' => '/menu/index', 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Feedback', 'icon' => 'comment', 'url' => '/feedback/index', 'visible' => !Yii::$app->user->isGuest],
         ];
     }
 

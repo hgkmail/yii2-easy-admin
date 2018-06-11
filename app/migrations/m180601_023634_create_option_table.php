@@ -8,12 +8,14 @@ use yii\db\Schema;
  */
 class m180601_023634_create_option_table extends Migration
 {
+    const TABLE_NAME = '{{%option}}';
+
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%option}}', [
+        $this->createTable(self::TABLE_NAME, [
             'id' => $this->primaryKey(),
             'type' => $this->string()->notNull(),
             'user_id' => $this->integer(),
@@ -22,7 +24,7 @@ class m180601_023634_create_option_table extends Migration
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
         ]);
-        $this->addForeignKey('fk-option-user_id', '{{%option}}', '[[user_id]]',
+        $this->addForeignKey('fk-option-user_id', self::TABLE_NAME, '[[user_id]]',
             '{{%user}}', '[[id]]', 'CASCADE', 'CASCADE');
     }
 
@@ -31,7 +33,7 @@ class m180601_023634_create_option_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-option-user_id', '{{%option}}');
-        $this->dropTable('{{%option}}');
+        $this->dropForeignKey('fk-option-user_id', self::TABLE_NAME);
+        $this->dropTable(self::TABLE_NAME);
     }
 }

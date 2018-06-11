@@ -4,6 +4,8 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\form\RegisterForm */
+/* @var $roles app\models\Role[] */
+/* @var $userprofile \app\models\UserProfile */
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'User',
@@ -16,6 +18,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <?= $this->render('_form', [
         'model' => $model,
+        'roles' => $roles,
+        'userprofile' => $userprofile,
     ]) ?>
 
 </div>

@@ -9,7 +9,9 @@
 namespace app\models\form;
 
 
+use app\models\Role;
 use app\models\User;
+use app\services\UserService;
 use yii\base\Model;
 
 /**
@@ -27,6 +29,7 @@ class RegisterForm extends Model
     public $password;
     public $passwordRepeat;
     public $status;
+    public $role;
 
     /**
      * @var User
@@ -44,9 +47,9 @@ class RegisterForm extends Model
             [['username', 'email', 'password', 'passwordRepeat'], 'required', 'on' => static::SCENARIO_REGISTER],
             ['passwordRepeat', 'compare', 'compareAttribute' => 'password', 'on' => static::SCENARIO_REGISTER],
             // create user
-            [['username', 'email', 'password', 'status'], 'required', 'on' => static::SCENARIO_CREATE],
+            [['username', 'email', 'password', 'status', 'role'], 'required', 'on' => static::SCENARIO_CREATE],
             // update user
-            [['username', 'email', 'status'], 'required', 'on' => static::SCENARIO_UPDATE],
+            [['username', 'email', 'status', 'role'], 'required', 'on' => static::SCENARIO_UPDATE],
             ['password', 'safe', 'on' => static::SCENARIO_UPDATE],
         ];
     }
@@ -59,6 +62,7 @@ class RegisterForm extends Model
             'password' => \Yii::t('app', 'Password'),
             'passwordRepeat' => \Yii::t('app', 'Retype Password'),
             'status' => \Yii::t('app', 'Status'),
+            'role' => \Yii::t('app', 'Role'),
         ];
     }
 
@@ -83,6 +87,7 @@ class RegisterForm extends Model
      */
     public function register()
     {
+        /* @var $userService UserService */
         $userService = \Yii::$app->get('userService');
         return $userService->register($this->username, $this->email, $this->password);
     }
@@ -102,6 +107,10 @@ class RegisterForm extends Model
         $newUser->auth_key = \Yii::$app->getSecurity()->generateRandomString(8);
         $newUser->status = $this->status;
         $newUser->save();
+
+        $auth = \Yii::$app->authManager;
+        $role = $auth->getRole($this->role);
+        $auth->assign($role, $newUser->id);
         return $newUser;
     }
 
@@ -112,6 +121,8 @@ class RegisterForm extends Model
         $this->username = $this->_user->username;
         $this->email = $this->_user->email;
         $this->status = $this->_user->status;
+        $role = $this->_user->role;
+        $this->role = empty($role) ? null : $role->name;
         $this->password = '';
     }
 
@@ -135,6 +146,17 @@ class RegisterForm extends Model
             $this->_user->password_hash = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
         }
         $this->_user->save();
+
+        // one user can only have one role
+        $auth = \Yii::$app->authManager;
+        $oldRoles = $auth->getRolesByUser($this->_user->id);
+        $newRole = $auth->getRole($this->role);
+        if (empty($oldRoles)) {
+            $auth->assign($newRole, $this->_user->id);
+        } else if(array_keys($oldRoles)[0]!=$newRole->name) {
+            $auth->revoke(array_values($oldRoles)[0], $this->_user->id);
+            $auth->assign($newRole, $this->_user->id);
+        }
     }
 
 }

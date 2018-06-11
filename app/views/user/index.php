@@ -10,12 +10,18 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $gridSetting array */
+/* @var $roles \app\models\Role[] */
 
 $this->title = Yii::t('app', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
 
+$roleNames = [];
+array_walk($roles, function ($role, $idx) use(&$roleNames) {
+    $roleNames[$role->name] = $role->name;
+});
+
 // default grid setting
-$gridSetting = $gridSetting == null ? ['email'] : $gridSetting;
+$gridSetting = $gridSetting == null ? ['email', 'role'] : $gridSetting;
 ?>
 <div class="user-index box box-primary">
     <?php Pjax::begin(); ?>
@@ -42,6 +48,9 @@ $gridSetting = $gridSetting == null ? ['email'] : $gridSetting;
                 ],
                 'username',
                 ['attribute' => 'email', 'format' => 'email', 'visible' => in_array('email', $gridSetting)],
+                ['attribute' => 'role', 'value' => 'role.name', 'filter' => $roleNames,
+                    'visible' => in_array('role', $gridSetting),
+                ],
                 ['attribute' => 'status', 'visible' => in_array('status', $gridSetting),
                     'filter' => [User::STATUS_ENABLED => 'Enabled', User::STATUS_DISABLED => 'Disabled'],
                     'value' => function($model, $key, $index, $column) {
@@ -56,7 +65,7 @@ $gridSetting = $gridSetting == null ? ['email'] : $gridSetting;
     <?= GridSettingModal::widget([
             'modalId' => 'grid-setting',
             'searchModel' => $searchModel,
-            'optAttributes' => ['email', 'status'],
+            'optAttributes' => ['email', 'role', 'status'],
             'gridSetting' => $gridSetting,
     ]) ?>
 

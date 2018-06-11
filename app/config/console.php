@@ -25,6 +25,11 @@ $config = [
             ],
         ],
         'db' => $db,
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            // uncomment if production
+            // 'cache' => 'cache',
+        ],
         'userService' => [
             'class' => '\app\services\UserService',
         ],

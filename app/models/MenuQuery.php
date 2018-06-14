@@ -1,14 +1,20 @@
 <?php
 
 namespace app\models;
+use yii\db\ActiveQuery;
 
 /**
  * This is the ActiveQuery class for [[Menu]].
  *
  * @see Menu
  */
-class MenuQuery extends \yii\db\ActiveQuery
+class MenuQuery extends ActiveQuery
 {
+    public function defaultOrder()
+    {
+        return $this->orderBy(['order' => SORT_ASC, 'id' => SORT_ASC]);
+    }
+
     /**
      * {@inheritdoc}
      * @return Menu[]|array

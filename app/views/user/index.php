@@ -40,12 +40,7 @@ $gridSetting = $gridSetting == null ? ['email', 'role'] : $gridSetting;
             'id' => 'grid',
             'layout' => "{items}\n{summary}\n{pager}",
             'columns' => [
-//                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'class' => '\yii\grid\CheckboxColumn',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center'],
-                ],
+                ['class' => '\app\widgets\CustomCheckboxColumn'],
                 'username',
                 ['attribute' => 'email', 'format' => 'email', 'visible' => in_array('email', $gridSetting)],
                 ['attribute' => 'role', 'value' => 'role.name', 'filter' => $roleNames,

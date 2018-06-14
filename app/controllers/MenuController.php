@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\form\MenuTreeNode;
+use app\services\MainMenuService;
 use Yii;
 use app\models\Menu;
 use app\models\search\MenuSearch;
@@ -14,6 +16,15 @@ use yii\filters\VerbFilter;
  */
 class MenuController extends Controller
 {
+    /* @var $mainMenuService MainMenuService */
+    public $mainMenuService;
+
+    public function init()
+    {
+        parent::init();
+        $this->mainMenuService = Yii::$app->get('mainMenuService');
+    }
+
     /**
      * @inheritdoc
      */
@@ -105,7 +116,31 @@ class MenuController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $menu = $this->findModel($id);
+        $grandChildren = $this->mainMenuService->getGrandchildren([$menu]);
+
+        $menu->delete();
+        foreach ($grandChildren as $grandChild) {
+            $grandChild->delete();
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionMoveUp()
+    {
+        $id = Yii::$app->request->get('id');
+        $menu = $this->findModel($id);
+        $this->mainMenuService->move($menu, -1);
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionMoveDown()
+    {
+        $id = Yii::$app->request->get('id');
+        $menu = $this->findModel($id);
+        $this->mainMenuService->move($menu, 1);
 
         return $this->redirect(['index']);
     }

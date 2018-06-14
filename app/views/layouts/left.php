@@ -26,10 +26,10 @@
         </form>
         <!-- /.search form -->
 
-        <?= dmstr\widgets\Menu::widget(
+        <?= \app\widgets\MainMenu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
-                'items' => Yii::$app->get('mainMenuService')->getStaticItems(),
+                'items' => Yii::$app->get('mainMenuService')->getMenuItems(),
             ]
         ) ?>
 

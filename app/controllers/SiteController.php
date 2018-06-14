@@ -4,9 +4,14 @@ namespace app\controllers;
 
 use app\base\ExceptionFilter;
 use app\base\UploadAction;
+use app\models\form\MenuTreeNode;
 use app\models\form\RegisterForm;
+use app\models\Menu;
+use app\services\MainMenuService;
+use app\widgets\MainMenu;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -109,7 +114,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect('login');
     }
 
     /**
@@ -147,6 +152,11 @@ class SiteController extends Controller
         return $this->render('test-adminlte');
     }
 
+    public function actionTestWidget()
+    {
+        return $this->render('test-widget');
+    }
+
     public function actionRegister()
     {
         $model  = new RegisterForm(['scenario' => RegisterForm::SCENARIO_REGISTER]);
@@ -175,4 +185,26 @@ class SiteController extends Controller
             $file->saveAs(Yii::getAlias('@webroot')."/upload/avatar/$file->baseName.$file->extension");
         }
     }
+
+    public function actionTestMenu()
+    {
+        /* @var $mainMenuService MainMenuService */
+        $mainMenuService = Yii::$app->get('mainMenuService');
+
+        $role = Yii::$app->user->identity->role;
+        $menuList = Menu::find()->defaultOrder()->all();
+        $selectedMenuList = $role->menus;
+        $menuList = $mainMenuService->includeParent($menuList, $selectedMenuList);
+        $nodeList = $mainMenuService->convertTree(MenuTreeNode::toNodeList($menuList));
+        foreach ($nodeList as $i => $menu) {
+            $url = $menu['url'][0];
+            $visible = $menu['visible'];
+            echo "$i-$url-$visible<br>";
+        }
+        echo $html = MainMenu::widget([
+            'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
+            'items' => $nodeList,
+        ]);
+    }
+
 }

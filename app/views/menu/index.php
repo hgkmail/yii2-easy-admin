@@ -17,6 +17,8 @@ $('body').on('keyup', '#top-filter', function(event) {
       window.location.href = "/menu/index?top-filter="+$(this).val();
   }
 });
+
+$('span.glyphicon-trash').closest('a').data('confirm', '这会一并删除此项的所有子节点，您确定要删除吗?');
 JS;
 $this->registerJs($js);
 
@@ -41,11 +43,8 @@ $this->registerJs($js);
 //            'layout' => "{items}\n{summary}\n{pager}",
             'layout' => "{items}\n{pager}",
             'columns' => [
-                [
-                    'class' => '\yii\grid\CheckboxColumn',
-                    'headerOptions' => ['class' => 'text-center'],
-                    'contentOptions' => ['class' => 'text-center'],
-                ],
+                ['class' => '\app\widgets\CustomCheckboxColumn'],
+                ['class' => '\app\widgets\MenuActionColumn'],
                 ['attribute' => 'label', 'format' => 'raw'],
                 [
                         'attribute' => 'icon',
@@ -58,7 +57,6 @@ $this->registerJs($js);
                 'url:url',
                 'order',
                 // 'parent_id',
-                ['class' => 'yii\grid\ActionColumn'],
             ],
         ]); ?>
     </div>

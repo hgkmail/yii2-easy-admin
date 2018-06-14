@@ -27,8 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 'user.username:text:User',
                 'title',
-                'content:raw',
                 'score',
+                'content:raw',
                 'created_at:date',
             ],
         ]) ?>

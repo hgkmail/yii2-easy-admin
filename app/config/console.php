@@ -33,6 +33,12 @@ $config = [
         'userService' => [
             'class' => '\app\services\UserService',
         ],
+        'mainMenuService' => [
+            'class' => '\app\services\MainMenuService'
+        ],
+        'optionService' => [
+            'class' => '\app\services\OptionService'
+        ],
     ],
     'params' => $params,
     /*

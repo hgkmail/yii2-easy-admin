@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\rbac\Item;
 
@@ -21,6 +23,9 @@ use yii\rbac\Item;
  */
 class Role extends ActiveRecord
 {
+    const TYPE_ROLE = Item::TYPE_ROLE;
+    const TYPE_PERMISSION = Item::TYPE_PERMISSION;
+
     /**
      * {@inheritdoc}
      */
@@ -35,11 +40,18 @@ class Role extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'type'], 'required'],
+            [['name'], 'required'],
             [['type', 'created_at', 'updated_at'], 'integer'],
             [['description', 'data'], 'string'],
             [['name', 'rule_name'], 'string', 'max' => 64],
             [['name'], 'unique'],
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class
         ];
     }
 
@@ -68,5 +80,34 @@ class Role extends ActiveRecord
         $query = new RoleQuery(get_called_class());
         $query->where(['type' => Item::TYPE_ROLE]);   // use andWhere outside
         return $query;
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getMenus()
+    {
+        return $this->hasMany(Menu::class, ['id' => 'menu_id'])
+            ->viaTable('{{%role_menu}}', ['role_name' => 'name']);
+    }
+
+    /**
+     * @param array $menuIds
+     * @throws \yii\db\Exception
+     */
+    public function saveRoleMenu(array $menuIds)
+    {
+        Yii::$app->db->createCommand()
+            ->delete('{{%role_menu}}', 'role_name=:rn', [':rn' => $this->name])
+            ->execute();
+        foreach ($menuIds as $id) {
+            if(!empty($id)) {
+                Yii::$app->db->createCommand()->insert('{{%role_menu}}', [
+                    'role_name' => $this->name,
+                    'menu_id' => $id,
+                    'created_at' => time()
+                ])->execute();
+            }
+        }
     }
 }

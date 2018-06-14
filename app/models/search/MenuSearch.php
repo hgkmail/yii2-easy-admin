@@ -44,7 +44,7 @@ class MenuSearch extends Menu
      */
     public function search($params)
     {
-        $query = Menu::find();
+        $query = Menu::find()->defaultOrder();
 
         // add conditions that should always apply here
 

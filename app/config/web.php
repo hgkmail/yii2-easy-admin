@@ -25,6 +25,14 @@ $config = [
 //            'identityClass' => 'app\models\StaticUser',
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+            'on afterLogin' => function($event) {
+                $identity = $event->identity;
+                Yii::$app->session->addFlash('success', "Welcome, $identity->username");
+                Yii::$app->get('mainMenuService')->putUserMenuCache();
+            },
+            'on afterLogout' => function($event) {
+                Yii::$app->get('mainMenuService')->clearUserMenuCache();
+            },
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

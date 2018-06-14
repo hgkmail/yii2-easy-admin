@@ -10,6 +10,7 @@ namespace app\commands;
 use app\base\Walker;
 use app\commands\misc\MyWalker;
 use app\commands\misc\TreeNode;
+use app\models\Menu;
 use app\models\Role;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -106,5 +107,24 @@ class HelloController extends Controller
     {
         $world = "tom";
         echo "${world}hello\n";
+    }
+
+    public function actionMenu()
+    {
+        /* @var $mainMenuService \app\services\MainMenuService */
+        $mainMenuService = \Yii::$app->get('mainMenuService');
+        $top = Menu::find()->where(['id' => 2])->one();
+
+        $child1 = $mainMenuService->getChildren([$top]);
+        foreach ($child1 as $c1) {
+            echo 'c1:'.$c1->label."\n";
+        }
+
+        $child2 = $mainMenuService->getGrandchildren([$top]);
+        foreach ($child2 as $c2) {
+            echo 'c2:'.$c2->label."\n";
+        }
+
+
     }
 }

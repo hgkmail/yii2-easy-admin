@@ -21,6 +21,8 @@ $this->registerJs($js);
 
         <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+        <?= $form->field($model, 'score')->textInput(['type' => 'text', 'id' => 'star-rating']) ?>
+
         <?= $form->field($model, 'content')->widget(\dosamigos\tinymce\TinyMce::class, [
             'options' => [
                 'row' => 10,
@@ -28,6 +30,7 @@ $this->registerJs($js);
             ],
             'language' => 'zh_CN',
             'clientOptions' => [
+                'height' => '320',
                 'plugins' => [
                     "advlist autolink lists link charmap print preview anchor",
                     "searchreplace visualblocks code fullscreen",
@@ -37,8 +40,6 @@ $this->registerJs($js);
                 bullist numlist outdent indent | link image",
             ],
         ]) ?>
-
-        <?= $form->field($model, 'score')->textInput(['type' => 'text', 'id' => 'star-rating']) ?>
 
     </div>
     <div class="box-footer">

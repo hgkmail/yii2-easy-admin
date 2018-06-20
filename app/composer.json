@@ -23,7 +23,13 @@
         "2amigos/yii2-ckeditor-widget": "^2.1",
         "bizley/quill": "^2.0",
         "kartik-v/yii2-widget-select2": "@dev",
-        "lavrentiev/yii2-toastr": "^2.0"
+        "lavrentiev/yii2-toastr": "^2.0",
+        "emojione/emojione": "^3.1",
+        "mervick/emojionearea": "^3.0.0",
+        "studio-42/elfinder": "^2.1",
+        "mihaildev/yii2-elfinder": "^1.2",
+        "yiisoft/yii2-authclient": "~2.1.0",
+        "filsh/yii2-oauth2-server": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

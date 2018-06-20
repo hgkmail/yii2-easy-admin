@@ -36,7 +36,8 @@ class Feedback extends ActiveRecord
         return [
             [['user_id', 'score', 'created_at'], 'integer'],
             ['score', 'integer', 'max' => 5, 'min' => 0],
-            [['title', 'content'], 'string', 'max' => 255],
+            [['title'], 'string', 'max' => 255],
+            ['content', 'string'],
         ];
     }
 

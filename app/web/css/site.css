@@ -205,6 +205,11 @@ a.desc:after {
     height: 40px;
 }
 
+/* unread style */
+.unread {
+    font-weight: bold !important;
+}
+
 
 
 

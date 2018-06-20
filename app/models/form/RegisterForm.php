@@ -9,6 +9,7 @@
 namespace app\models\form;
 
 
+use app\models\OperationLog;
 use app\models\Role;
 use app\models\User;
 use app\services\UserService;
@@ -89,7 +90,14 @@ class RegisterForm extends Model
     {
         /* @var $userService UserService */
         $userService = \Yii::$app->get('userService');
-        return $userService->register($this->username, $this->email, $this->password);
+        $user =  $userService->register($this->username, $this->email, $this->password);
+        // op log
+        $log = OperationLog::withDefault();
+        $log->user_id = $user->id;
+        $log->description = "User $user->username registers.";
+        $log->save();
+
+        return $user;
     }
 
     /**

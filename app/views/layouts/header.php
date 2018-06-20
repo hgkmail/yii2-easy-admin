@@ -1,8 +1,16 @@
 <?php
+
+use app\base\TimeAgoUtil;
 use yii\helpers\Html;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
+
+/* @var $inmailService \app\services\InmailService */
+$inmailService = Yii::$app->get('inmailService');
+$unreads = $inmailService->getUnreadInmails();
+$unreadCount = count($unreads);
+
 ?>
 
 <header class="main-header">
@@ -23,82 +31,40 @@ use yii\helpers\Html;
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-envelope-o"></i>
-                        <span class="label label-success">4</span>
+                        <span class="label label-success <?= $unreadCount>0?'':'hidden' ?>">
+                            <?= $unreadCount ?>
+                        </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">You have 4 messages</li>
+                        <li class="header">
+                            <?= $unreadCount>0?"You have $unreadCount inmails.":"You have no new inmails." ?>
+                        </li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
-                                <li><!-- start message -->
-                                    <a href="#">
+                                <!-- start message -->
+                                <?php foreach ($unreads as $unread) { ?>
+                                <li>
+                                    <a href="/inmail-received/view?id=<?= $unread->id ?>">
                                         <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
-                                                 alt="User Image"/>
+                                            <img src="<?= $unread->senderUser->userProfile->avatar ?>"
+                                                 class="img-circle" alt="User Image"/>
                                         </div>
                                         <h4>
-                                            Support Team
-                                            <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            <?= $unread->senderUser->username ?>
+                                            <small>
+                                                <i class="fa fa-clock-o"></i>
+                                                <?= TimeAgoUtil::time_elapsed_string("@$unread->created_at") ?>
+                                            </small>
                                         </h4>
-                                        <p>Why not buy a new awesome theme?</p>
+                                        <p><?= $unread->subject ?></p>
                                     </a>
                                 </li>
+                                <?php } ?>
                                 <!-- end message -->
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/user3-128x128.jpg" class="img-circle"
-                                                 alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            AdminLTE Design Team
-                                            <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="img-circle"
-                                                 alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Developers
-                                            <small><i class="fa fa-clock-o"></i> Today</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/user3-128x128.jpg" class="img-circle"
-                                                 alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Sales Department
-                                            <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="pull-left">
-                                            <img src="<?= $directoryAsset ?>/img/user4-128x128.jpg" class="img-circle"
-                                                 alt="user image"/>
-                                        </div>
-                                        <h4>
-                                            Reviewers
-                                            <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                        </h4>
-                                        <p>Why not buy a new awesome theme?</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">See All Messages</a></li>
+                        <li class="footer"><a href="/inmail-received/index">See All Inmails</a></li>
                     </ul>
                 </li>
                 <li class="dropdown notifications-menu">

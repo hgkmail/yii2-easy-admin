@@ -87,6 +87,16 @@ $config = [
                 ],
             ],
         ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'github' => [
+                    'class' => '\yii\authclient\clients\GitHub',
+                    'clientId' => '870219688d7d5d1a7b92',
+                    'clientSecret' => '431e7d43f033633892585da00cf24f337a3c592f',
+                ],
+            ],
+        ],
         'userService' => [
             'class' => '\app\services\UserService',
         ],
@@ -95,6 +105,9 @@ $config = [
         ],
         'optionService' => [
             'class' => '\app\services\OptionService'
+        ],
+        'inmailService' => [
+            'class' => '\app\services\InmailService'
         ],
     ],
     'params' => $params,

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -10,6 +11,7 @@ use yii\widgets\ActiveForm;
 
 $js = <<<JS
 $("#star-rating").rating({'step': 1, 'hoverChangeStars': false, 'showClear':false, 'showCaption': false, 'size': 'sm'});
+
 JS;
 $this->registerJs($js);
 
@@ -23,22 +25,8 @@ $this->registerJs($js);
 
         <?= $form->field($model, 'score')->textInput(['type' => 'text', 'id' => 'star-rating']) ?>
 
-        <?= $form->field($model, 'content')->widget(\dosamigos\tinymce\TinyMce::class, [
-            'options' => [
-                'row' => 10,
-                'id' => 'tiny-editor',
-            ],
-            'language' => 'zh_CN',
-            'clientOptions' => [
-                'height' => '320',
-                'plugins' => [
-                    "advlist autolink lists link charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table contextmenu paste"
-                ],
-                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | 
-                bullist numlist outdent indent | link image",
-            ],
+        <?= $form->field($model, 'content')->widget(\app\widgets\CustomTinyMce::class, [
+            'options' => ['row' => 10, 'id' => 'tiny-editor'],
         ]) ?>
 
     </div>

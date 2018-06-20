@@ -7,6 +7,7 @@
 
 namespace app\commands;
 
+use app\base\TimeAgoUtil;
 use app\base\Walker;
 use app\commands\misc\MyWalker;
 use app\commands\misc\TreeNode;
@@ -126,5 +127,10 @@ class HelloController extends Controller
         }
 
 
+    }
+
+    public function actionTimeAgo()
+    {
+        echo TimeAgoUtil::time_elapsed_string('@1529488054')."\n";
     }
 }

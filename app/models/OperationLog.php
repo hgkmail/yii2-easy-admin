@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -19,12 +20,23 @@ use yii\db\ActiveRecord;
  */
 class OperationLog extends ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return '{{%operation_log}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => TimestampBehavior::class,
+                'updatedAtAttribute' => false,
+            ]
+        ];
     }
 
     /**
@@ -64,5 +76,34 @@ class OperationLog extends ActiveRecord
     public static function find()
     {
         return new OperationLogQuery(get_called_class());
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * @return OperationLog
+     * Return an op log with current request's ip, path, method and input.
+     * @throws \yii\base\InvalidConfigException
+     */
+    public static function withDefault()
+    {
+        $log = new OperationLog();
+
+        $log->ip = Yii::$app->request->getUserIP();
+        $log->path = Yii::$app->request->getPathInfo();
+        $log->method = Yii::$app->request->method;
+
+        $_csrf = $_REQUEST['_csrf'];
+        unset($_REQUEST['_csrf']);
+        $log->input = json_encode($_REQUEST);
+        $_REQUEST['_csrf'] = $_csrf;
+
+        return $log;
     }
 }

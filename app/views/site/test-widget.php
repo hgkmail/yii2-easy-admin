@@ -91,3 +91,9 @@ $this->registerJs($js);
 <div id="tree3"></div>
 <div>Selected keys: <span id="echoSelection3">-</span></div>
 <div>Selected root keys: <span id="echoSelectionRootKeys3">-</span></div>
+
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+</div>

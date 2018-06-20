@@ -9,7 +9,9 @@
 namespace app\services;
 
 
+use app\models\Role;
 use app\models\User;
+use Yii;
 use yii\base\Component;
 
 class UserService extends Component
@@ -27,11 +29,13 @@ class UserService extends Component
         $newUser = new User();
         $newUser->username = $username;
         $newUser->email = $email;
-        $newUser->password_hash = \Yii::$app->getSecurity()->generatePasswordHash($password);
-        $newUser->password_reset_token = \Yii::$app->getSecurity()->generateRandomString(4);
-        $newUser->auth_key = \Yii::$app->getSecurity()->generateRandomString(8);
+        $newUser->password_hash = Yii::$app->getSecurity()->generatePasswordHash($password);
+        $newUser->password_reset_token = Yii::$app->getSecurity()->generateRandomString(4);
+        $newUser->auth_key = Yii::$app->getSecurity()->generateRandomString(8);
         $newUser->status = User::STATUS_ENABLED;
         $newUser->save();
+        $subscriber = Yii::$app->authManager->getRole('subscriber');
+        Yii::$app->authManager->assign($subscriber, $newUser->id);
         return $newUser;
     }
 

@@ -12,11 +12,23 @@ namespace app\base;
 use app\models\UserProfile;
 use Yii;
 use yii\base\Action;
+use yii\base\InvalidArgumentException;
 use yii\web\UploadedFile;
 
 
 class UploadAction extends Action
 {
+
+    private function asSuccess($code, $data)
+    {
+        return $this->controller->asJson(['code' => $code, 'data' => $data]);
+    }
+
+    private function asError($code, $msg)
+    {
+        return $this->controller->asJson(['code' => $code, 'msg' => $msg]);
+    }
+
     /**
      * @param string file file to upload
      * @param string category folder to save, default is temp
@@ -39,6 +51,10 @@ class UploadAction extends Action
             $category = 'temp';
         }
 
+        if(isset($_REQUEST['chunks'])) {
+            return $this->handleChunk();
+        }
+
         if($file) {
             $rand = uniqid($file->baseName.'_');
             $url = "/upload/$category/$rand.$file->extension";
@@ -46,9 +62,9 @@ class UploadAction extends Action
             if(!empty($modelId) && $category!='temp') {
                 $this->updateAfterUpload($category, $modelId, $url);
             }
-            return $this->controller->asJson(['code' => 200, 'data' => $url]);
+            return $this->asSuccess(200, $url);
         } else {
-            return $this->controller->asJson(['code' => 400, 'msg' => 'file is empty']);
+            return $this->asError(400, 'file is empty');
         }
     }
 
@@ -64,4 +80,82 @@ class UploadAction extends Action
                 break;
         }
     }
+    
+    public function handleChunk()
+    {
+        // Settings
+        $targetDir = Yii::getAlias('@webroot') . "/upload/part";
+        $cleanupTargetDir = true; // Remove old files
+        $maxFileAge = 1 * 3600; // Temp file age in seconds
+
+        // Get a file name
+        $fileName = '';
+        if (isset($_REQUEST["name"])) {
+            $fileName = $_REQUEST["name"];
+        } else {
+            return $this->asError(400, 'Chunk upload must have "name" param');
+        }
+
+        $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+
+        // Chunking might be enabled
+        $chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
+        $chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
+
+        // Remove old temp files	
+        if ($cleanupTargetDir) {
+            if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
+                return $this->asError(500, 'Failed to open temp directory for chunk');
+            }
+
+            while (($file = readdir($dir)) !== false) {
+                $tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
+
+                // If temp file is current file proceed to the next
+                if ($tmpfilePath == "{$filePath}.part") {
+                    continue;
+                }
+
+                // Remove temp file if it is older than the max age and is not the current file
+                if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge)) {
+                    @unlink($tmpfilePath);
+                }
+            }
+            closedir($dir);
+        }
+
+        // Open temp file
+        if (!$out = @fopen("{$filePath}.part", $chunks ? "ab" : "wb")) {
+            return $this->asError(500, 'Failed to open output stream');
+        }
+
+        if (!empty($_FILES)) {
+            if ($_FILES["file_data"]["error"] || !is_uploaded_file($_FILES["file_data"]["tmp_name"])) {
+                return $this->asError(400, 'Uploaded file has error');
+            }
+            // Read binary input stream and append it to temp file
+            if (!$in = @fopen($_FILES["file_data"]["tmp_name"], "rb")) {
+                return $this->asError(500, 'Failed to open input stream');
+            }
+        } else {
+            if (!$in = @fopen("php://input", "rb")) {
+                return $this->asError(500, 'Failed to open input stream by php://input');
+            }
+        }
+
+        while ($buff = fread($in, 4096)) {   // 4k
+            fwrite($out, $buff);
+        }
+
+        @fclose($out);
+        @fclose($in);
+
+        // Check if file has been uploaded
+        if (!$chunks || $chunk == $chunks - 1) {
+            // Strip the temp .part suffix off
+            rename("{$filePath}.part", $filePath);
+        }
+        return $this->asSuccess(200, "/upload/part/$fileName");
+    } // end of handleChunk
+
 }

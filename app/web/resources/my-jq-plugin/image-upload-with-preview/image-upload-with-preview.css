@@ -1,0 +1,56 @@
+.image-upload-with-preview {
+  position: relative;
+  max-width: 205px;
+  margin: 10px auto;
+}
+.image-upload-with-preview .image-edit {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+.image-upload-with-preview .image-edit input {
+  display: none;
+}
+.image-upload-with-preview .image-edit input + label {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 0;
+  border-radius: 100%;
+  background: #ffffff;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-weight: normal;
+  transition: all 0.2s ease-in-out;
+}
+.image-upload-with-preview .image-edit input + label:hover {
+  background: #f1f1f1;
+  border-color: #d6d6d6;
+}
+.image-upload-with-preview .image-edit input + label:after {
+  content: "\f040";
+  font-family: "FontAwesome";
+  color: #757575;
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin: auto;
+}
+.image-upload-with-preview .image-preview {
+  width: 192px;
+  height: 192px;
+  position: relative;
+  border: 6px solid #f8f8f8;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+}
+.image-upload-with-preview .image-preview > div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background: no-repeat center;
+}
+/*# sourceMappingURL=image-upload-with-preview.css.map */

@@ -13,6 +13,8 @@ use yii\data\ArrayDataProvider;
 
 class TreeArrayDataProvider extends ArrayDataProvider
 {
+    public $label_field = 'label';
+
     protected function prepareModels()
     {
         if (($models = $this->allModels) === null) {
@@ -20,6 +22,7 @@ class TreeArrayDataProvider extends ArrayDataProvider
         }
 
         $walker = new MenuGridWalker();
+        $walker->label_field = $this->label_field;
         if (($sort = $this->getSort()) !== false) {
             $models = $this->sortModels($models, $sort);
         }

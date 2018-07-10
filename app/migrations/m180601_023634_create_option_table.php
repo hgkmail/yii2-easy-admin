@@ -26,6 +26,9 @@ class m180601_023634_create_option_table extends Migration
         ]);
         $this->addForeignKey('fk-option-user_id', self::TABLE_NAME, '[[user_id]]',
             '{{%user}}', '[[id]]', 'CASCADE', 'CASCADE');
+
+        $this->createIndex('idx-option-type', self::TABLE_NAME, '[[type]]');
+        $this->createIndex('idx-option-key', self::TABLE_NAME, '[[key]]');
     }
 
     /**

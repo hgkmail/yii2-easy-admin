@@ -1,3 +1,26 @@
+<?php
+
+use yii\web\View;
+
+$userComp = Yii::$app->user;
+$user = null;
+$userProfile = null;
+if(!$userComp->isGuest) {
+    $user = $userComp->getIdentity();
+    $userProfile = $user->userProfile;
+}
+
+$js_body_begin = <<<JS
+function avatarError(image) {
+    image.onerror = "";
+    image.src = "$directoryAsset/img/user2-160x160.jpg";
+    return true;
+}
+JS;
+$this->registerJs($js_body_begin, View::POS_BEGIN);
+
+?>
+
 <aside class="main-sidebar">
 
     <section class="sidebar">
@@ -5,7 +28,11 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <?php if($userProfile) { ?>
+                    <img src="<?= $userProfile->avatar ?>" class="img-circle" alt="User Image" onerror="avatarError(this)"/>
+                <?php } else { ?>
+                    <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <?php } ?>
             </div>
             <div class="pull-left info">
                 <p><?= Yii::$app->user->isGuest?'Not Login':Yii::$app->user->getIdentity()->username ?></p>

@@ -96,7 +96,7 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $menus = Menu::find()->all();
+        $menus = Menu::find()->where('id!=:id', [':id' => $id])->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -142,6 +142,13 @@ class MenuController extends Controller
         $menu = $this->findModel($id);
         $this->mainMenuService->move($menu, 1);
 
+        return $this->redirect(['index']);
+    }
+
+    public function actionSync()
+    {
+        $this->mainMenuService->clearUserMenuCache();
+        $this->mainMenuService->putUserMenuCache();
         return $this->redirect(['index']);
     }
 

@@ -29,6 +29,7 @@ $this->registerJs($js);
         <div class="form-inline">
             <?= Html::a(Yii::t('app', 'Create Menu'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
             <?= Html::a(Yii::t('app', 'Display Level'), ['index'], ['class' => 'btn btn-primary btn-flat']) ?>
+            <?= Html::a(Yii::t('app', 'Sync Session'), ['sync'], ['class' => 'btn btn-warning btn-flat']) ?>
             <div class="form-group">
                 <?= Html::label("Top Filter:", "top-filter") ?>
                 <?= Html::input("text", "top-filter", '', ['id' => 'top-filter', 'class' => 'form-control']) ?>

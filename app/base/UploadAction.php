@@ -12,21 +12,20 @@ namespace app\base;
 use app\models\UserProfile;
 use Yii;
 use yii\base\Action;
-use yii\base\InvalidArgumentException;
 use yii\web\UploadedFile;
 
 
 class UploadAction extends Action
 {
 
-    private function asSuccess($code, $data)
+    private function asSuccess($code, $data, $extra=[])
     {
-        return $this->controller->asJson(['code' => $code, 'data' => $data]);
+        return $this->controller->asJson(['code' => $code, 'data' => $data, 'extra' => $extra]);
     }
 
-    private function asError($code, $msg)
+    private function asError($code, $msg, $extra=[])
     {
-        return $this->controller->asJson(['code' => $code, 'msg' => $msg]);
+        return $this->controller->asJson(['code' => $code, 'msg' => $msg, 'extra' => $extra]);
     }
 
     /**
@@ -88,6 +87,11 @@ class UploadAction extends Action
         $cleanupTargetDir = true; // Remove old files
         $maxFileAge = 1 * 3600; // Temp file age in seconds
 
+        $category = 'temp';
+        if (isset($_REQUEST['category'])) {
+            $category = $_REQUEST['category'];
+        }
+
         // Get a file name
         $fileName = '';
         if (isset($_REQUEST["name"])) {
@@ -143,7 +147,7 @@ class UploadAction extends Action
             }
         }
 
-        while ($buff = fread($in, 4096)) {   // 4k
+        while ($buff = fread($in, 4096)) {
             fwrite($out, $buff);
         }
 
@@ -152,10 +156,15 @@ class UploadAction extends Action
 
         // Check if file has been uploaded
         if (!$chunks || $chunk == $chunks - 1) {
-            // Strip the temp .part suffix off
-            rename("{$filePath}.part", $filePath);
+            $base = pathinfo($filePath, PATHINFO_FILENAME);
+            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+
+            $rand = uniqid("{$base}_");
+            $url = "/upload/$category/$rand.$ext";
+            rename("{$filePath}.part", Yii::getAlias('@webroot').$url);
+            return $this->asSuccess(200, $url);
         }
-        return $this->asSuccess(200, "/upload/part/$fileName");
+        return $this->asSuccess(200, "{$filePath}.part");
     } // end of handleChunk
 
 }

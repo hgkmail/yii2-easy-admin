@@ -36,7 +36,7 @@ class CustomTinyMce extends TinyMce
         $emojiModalId = $this->emojiModalId;
         $js_setup = <<<JS
 function setup(editor) {
-    editor.on('init', function(e) {
+    editor.on('init', function(e) { 
         
     });
     

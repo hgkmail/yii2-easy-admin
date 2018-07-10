@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 \app\assets\FileInputAsset::register($this);
 \app\assets\JqueryFileUploadAsset::register($this);
 \app\assets\PluploadAsset::register($this);
+\app\assets\FileIconAsset::register($this);
 
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->csrfToken;
@@ -102,7 +103,7 @@ uploader.bind('Error', function(up, err) {
 	document.getElementById('console').innerHTML += "\\n Error #" + err.code + ": " + err.message;
 });
 uploader.bind('FileUploaded', function(uploader, file, result) {
-    console.log('FileUploaded', file, result);
+    console.log('FileUploaded', file, result); 
 });
 uploader.bind('UploadComplete', function(uploader, files) {
     console.log('UploadComplete', files);
@@ -122,9 +123,9 @@ document.getElementById('start-upload').onclick = function() {
     var file4 = new File([oMyBlob], 'aaa.html');   // first param is array
     
     uploader.addFile(file1);
-    // uploader.addFile(file2);
-    // uploader.addFile(file3);
-    // uploader.addFile(file4);
+    uploader.addFile(file2);
+    uploader.addFile(file3);
+    uploader.addFile(file4);
 	uploader.start();
 };
 
@@ -132,6 +133,10 @@ JS;
 $this->registerJs($js);
 
 ?>
+
+<style>
+    .fiv-cla, .fiv-viv, .fiv-sqo { font-size: 5em; }
+</style>
 
 <div class="row">
     <div class="col-md-6">
@@ -164,6 +169,14 @@ $this->registerJs($js);
         </div>
         <br />
         <pre id="console"></pre>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <span class="fiv-viv fiv-icon-pdf"></span>
+        <span class="fiv-viv fiv-icon-wav"></span>
+        <span class="fiv-viv fiv-icon-blank"></span>
     </div>
 </div>
 

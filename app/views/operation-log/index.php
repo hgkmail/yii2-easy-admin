@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{view} {delete}',
                 ],
                 [
-                    'attribute' => 'user.username',
+                    'attribute' => 'user',
                     'value' => function($model) {
                         if(empty($model->user)) {
                             return '[Inactivated]';

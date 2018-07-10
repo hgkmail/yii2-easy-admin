@@ -210,6 +210,50 @@ a.desc:after {
     font-weight: bold !important;
 }
 
+/* tags input */
+.post-tag {
+    color: white;
+    font-size: 14px;
+    background: #d81b60;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+.post-cat {
+    color: white;
+    font-size: 14px;
+    background: #605ca8;
+    padding: 3px 10px;
+    border-radius: 4px;
+}
+
+.bootstrap-tagsinput {
+    width: 100%;
+}
+
+.post-tag-label {
+    font-size: 13px;
+    margin-right: 10px;
+}
+
+/* file icon */
+.fiv-cla, .fiv-viv, .fiv-sqo { font-size: 5em; }
+.strong {
+    font-weight: bold;
+}
+
+/* media thumb */
+.media-thumb {
+    max-width: 130px;
+    max-height: 130px;
+}
+
+/* nestable */
+.dd-btn {
+    margin: 0 5px;
+    cursor: pointer;
+}
+
 
 
 

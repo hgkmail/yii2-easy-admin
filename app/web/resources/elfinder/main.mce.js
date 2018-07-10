@@ -33,13 +33,21 @@
         // https://github.com/Studio-42/elFinder/wiki/Client-configuration-options
         opts = {
             getFileCallback : function(file, fm) {
+                // cosole.log(file, fm);
                 // pass selected file data to TinyMCE
                 parent.tinymce.activeEditor.windowManager.getParams().oninsert(file, fm);
                 // close popup window
                 parent.tinymce.activeEditor.windowManager.close();
             },
             url : 'php/connector.minimal.php', // connector URL (REQUIRED)
-            lang: lang                         // auto detected language (optional)
+            lang: lang,                         // auto detected language (optional)
+            handlers : {
+                select : function(event, elfinderInstance) {
+                    // console.log(event.data);
+                    // console.log(event.data.selected); // selected files hashes list
+                    // console.log(elfinderInstance.url(event.data.selected[0]));
+                }
+            }
         },
 
         // Start elFinder (REQUIRED)

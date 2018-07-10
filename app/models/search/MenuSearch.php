@@ -46,8 +46,7 @@ class MenuSearch extends Menu
     {
         $query = Menu::find()->defaultOrder();
 
-        // add conditions that should always apply here
-
+        // display like a tree default
         $dataProvider = null;
         if(isset($params['sort']) || isset($params['MenuSearch'])) {
             // active data provider
@@ -62,8 +61,8 @@ class MenuSearch extends Menu
             // filter top elements
             if (isset($params['top-filter'])) {
                 $top = $params['top-filter'];
-                $query->where('parent_id!=0')
-                    ->orWhere("parent_id=0 and label like :top", [':top' => "%$top%"]);
+                $query->where("parent_id=0 and label like :top", [':top' => "%$top%"])
+                      ->orWhere('parent_id!=0');
             }
             // array data provider
             $allModels = $query->all();
@@ -75,9 +74,7 @@ class MenuSearch extends Menu
             ]);
         }
 
-
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');

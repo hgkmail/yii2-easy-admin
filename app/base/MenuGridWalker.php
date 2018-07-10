@@ -26,6 +26,7 @@ class MenuGridWalker extends Walker
         'parent' => 'parent_id',
     ];
 
+    public $label_field = 'label';
 
     public function start_lvl( &$output, $depth = 0, $args = array() )
     {
@@ -41,8 +42,9 @@ class MenuGridWalker extends Walker
             return;
         }
         $indent = str_repeat($this->mark, $depth*$this->repeat);
+        $label_field = $this->label_field;
         $this->items[$object->id] = $object;
-        $this->items[$object->id]->label = $indent.$object->label;
+        $this->items[$object->id]->$label_field = $indent.$object->$label_field;
     }
 
     public function end_el( &$output, $object, $depth = 0, $args = array() )

@@ -24,6 +24,9 @@ class m180530_151123_create_user_table extends Migration
             'created_at' => $this->integer(),
             'updated_at' => $this->integer()
         ]);
+        // TODO: email should be unique
+        $this->createIndex('idx-user-email', self::TABLE_NAME, '[[email]]');
+        $this->createIndex('idx-user-status', self::TABLE_NAME, '[[status]]');
     }
 
     /**

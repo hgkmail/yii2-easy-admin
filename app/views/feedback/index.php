@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="box-header with-border">
         <?= Html::a(Yii::t('app', 'Create Feedback'), ['create'], ['class' => 'btn btn-success btn-flat']) ?>
         <?= \app\widgets\BatchDeleteButton::widget([
-                'action' => '/feedback/delete-batch'
+            'action' => '/feedback/delete-batch'
         ]) ?>
     </div>
     <div class="box-body table-responsive no-padding">

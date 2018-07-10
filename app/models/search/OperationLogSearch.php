@@ -12,6 +12,8 @@ use app\models\OperationLog;
  */
 class OperationLogSearch extends OperationLog
 {
+    public $user;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class OperationLogSearch extends OperationLog
     {
         return [
             [['id', 'user_id', 'created_at'], 'integer'],
-            [['ip', 'path', 'input', 'method', 'description'], 'safe'],
+            [['ip', 'path', 'input', 'method', 'description', 'user'], 'safe'],
         ];
     }
 
@@ -41,7 +43,7 @@ class OperationLogSearch extends OperationLog
      */
     public function search($params)
     {
-        $query = OperationLog::find()->with('user');
+        $query = OperationLog::find()->joinWith('user u');
 
         // add conditions that should always apply here
 
@@ -52,6 +54,11 @@ class OperationLogSearch extends OperationLog
                 'pageSize' => 20,
             ]
         ]);
+
+        $dataProvider->sort->attributes['user'] = [
+            'asc' => ['u.username' => SORT_ASC],
+            'desc' => ['u.username' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -64,13 +71,12 @@ class OperationLogSearch extends OperationLog
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
             'created_at' => $this->created_at,
         ]);
 
         $query->andFilterWhere(['like', 'ip', $this->ip])
             ->andFilterWhere(['like', 'path', $this->path])
-            ->andFilterWhere(['like', 'input', $this->input])
+            ->andFilterWhere(['like', 'u.username', $this->user])
             ->andFilterWhere(['like', 'method', $this->method])
             ->andFilterWhere(['like', 'description', $this->description]);
 

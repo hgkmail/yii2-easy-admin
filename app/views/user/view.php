@@ -32,8 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'email:email',
                 [
                     'attribute' => 'status',
-//                    'contentOptions' => ['class' => 'text-blue'],
-//                    'captionOptions' => ['class' => 'text-red'],
                     'value' => function ($model) {
                         return $model->status == User::STATUS_ENABLED ? 'Enabled' : 'Disabled';
                     },

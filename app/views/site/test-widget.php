@@ -11,11 +11,19 @@ $this->title = 'Test Widget';
 $this->params['breadcrumbs'][] = $this->title;
 
 \app\assets\FancyTreeAsset::register($this);
+\app\assets\NumberInputAsset::register($this);
+\app\assets\FaIconPickerAsset::register($this);
+\app\assets\NestableAsset::register($this);
 
 /* @var $mainMenuService \app\services\MainMenuService */
 $mainMenuService = Yii::$app->get('mainMenuService');
 $tree = $mainMenuService->getTree();
 $treeJson = json_encode($tree);
+
+$css = <<<CSS
+
+CSS;
+$this->registerCss($css);
 
 $js = <<<JS
 
@@ -74,6 +82,21 @@ $("#btnSelectAll3").click(function(){
       cookieId: "fancytree-Cb3",
       idPrefix: "fancytree-Cb3-"
 });
+ 
+$('#after').bootstrapNumber({    // must with bootstrap
+	upClass: 'primary',
+	downClass: 'primary',
+	center: true,
+});
+
+$('.icp').iconpicker({});
+
+$('.dd').nestable({ /* config options */ });
+
+$('.dd').on('change', function() {
+    /* on change event */
+    console.log('nestable', $('.dd').nestable('serialize'));
+});
 
 JS;
 $this->registerJs($js);
@@ -93,7 +116,88 @@ $this->registerJs($js);
 <div>Selected root keys: <span id="echoSelectionRootKeys3">-</span></div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label">After:</label>
+            <input id="after" class="form-control" type="number" value="5" min="1" max="10" />
+        </div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col-md-4">
+        <div class="input-group">
+            <input data-placement="bottomRight" class="form-control icp icp-auto" value="fas fa-archive"
+                   type="text"/>
+            <span class="input-group-addon"></span>
+        </div>
+    </div>
+</div>
+
+<!-- dd:container(div) dd-list:list(ol/ul) dd-item:item(li) dd-handle:event(div) -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="dd">
+            <ol class="dd-list">
+                <li class="dd-item" data-id="1">
+                    <div class="dd-handle">Item 1</div>
+                </li>
+                <li class="dd-item" data-id="2">
+                    <div class="dd-handle">Item 2</div>
+                    <ol class="dd-list">
+                        <li class="dd-item" data-id="6">
+                            <div class="dd-handle">Item 6</div>
+                        </li>
+                    </ol>
+                </li>
+                <li class="dd-item" data-id="3">
+                    <div class="dd-handle">Item 3</div>
+                    <ol class="dd-list">
+                        <li class="dd-item" data-id="4">
+                            <div class="dd-handle">Item 4</div>
+                        </li>
+                        <li class="dd-item" data-id="5">
+                            <div class="dd-handle">Item 5</div>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="dd" id="nestable3">
+            <ol class="dd-list">
+                <li class="dd-item dd3-item" data-id="13">
+                    <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 13
+                        <a data-toggle="collapse" href="#dd3-collapse" class="pull-right">toggle</a>
+                    </div>
+                    <div class="collapse" id="dd3-collapse">
+                        <p>aaa</p>
+                        <p>bbb</p>
+                        <p>ccc</p>
+                    </div>
+                </li>
+                <li class="dd-item dd3-item" data-id="14">
+                    <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 14</div>
+                </li>
+                <li class="dd-item dd3-item" data-id="15">
+                    <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 15</div>
+                    <ol class="dd-list">
+                        <li class="dd-item dd3-item" data-id="16">
+                            <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 16</div>
+                        </li>
+                        <li class="dd-item dd3-item" data-id="17">
+                            <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 17</div>
+                        </li>
+                        <li class="dd-item dd3-item" data-id="18">
+                            <div class="dd-handle dd3-handle"></div><div class="dd3-content">Item 18</div>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
     </div>
 </div>

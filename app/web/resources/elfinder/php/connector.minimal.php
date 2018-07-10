@@ -110,8 +110,8 @@ $opts = array(
         // upload volume
         array(
             'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
-            'path'          => '../../../upload/',                 // path to files (REQUIRED)
-            'URL'           => '/upload/', // URL to files (REQUIRED)
+            'path'          => '../../../upload/media/',                 // path to files (REQUIRED)
+            'URL'           => '/upload/media/', // URL to files (REQUIRED)
             'trashHash'     => 't2_Lw',                     // elFinder's hash of trash folder
             'winHashFix'    => DIRECTORY_SEPARATOR !== '/', // to make hash same to Linux one on windows too
             'uploadDeny'    => array('all'),                // All Mimetypes not allowed to upload
@@ -121,14 +121,15 @@ $opts = array(
             'defaults'      => array('read' => true, 'write' => false),
             'attributes' => [
                 [
-                    'pattern' => '/00.jpg/',
+                    'pattern' => '/.thumb/',
                     'read' => true,
                     'write' => false,
-                    'hidden' => false,
+                    'hidden' => true,
                     'locked' => true,
                 ],
             ],
         ),
+		/*
 		// Items volume
 		array(
 			'driver'        => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
@@ -153,6 +154,7 @@ $opts = array(
 			'uploadOrder'   => array('deny', 'allow'),      // Same as above
 			'accessControl' => 'access',                    // Same as above
 		)
+        */
 	)
 );
 

@@ -2,14 +2,32 @@
 
 use app\base\TimeAgoUtil;
 use yii\helpers\Html;
+use yii\web\View;
 
-/* @var $this \yii\web\View */
+/* @var $this View */
 /* @var $content string */
 
 /* @var $inmailService \app\services\InmailService */
 $inmailService = Yii::$app->get('inmailService');
 $unreads = $inmailService->getUnreadInmails();
 $unreadCount = count($unreads);
+
+$userComp = Yii::$app->user;
+$user = null;
+$userProfile = null;
+if(!$userComp->isGuest) {
+    $user = $userComp->getIdentity();
+    $userProfile = $user->userProfile;
+}
+
+$js_body_begin = <<<JS
+function avatarError(image) {
+    image.onerror = "";
+    image.src = "$directoryAsset/img/user2-160x160.jpg";
+    return true;
+}
+JS;
+$this->registerJs($js_body_begin, View::POS_BEGIN);
 
 ?>
 
@@ -195,7 +213,12 @@ $unreadCount = count($unreads);
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
+                        <?php if($userProfile) { ?>
+                            <img src="<?= $userProfile->avatar ?>" class="user-image" alt="User Image"
+                                 onerror="avatarError(this)"/>
+                        <?php } else { ?>
+                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
+                        <?php } ?>
                         <span class="hidden-xs">
                             <?= Yii::$app->user->isGuest?'Not Login':Yii::$app->user->getIdentity()->username ?>
                         </span>
@@ -203,9 +226,12 @@ $unreadCount = count($unreads);
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
-                                 alt="User Image"/>
-
+                            <?php if($userProfile) { ?>
+                                <img src="<?= $userProfile->avatar ?>" class="img-circle" alt="User Image"
+                                     onerror="avatarError(this)"/>
+                            <?php } else { ?>
+                                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                            <?php } ?>
                             <p>
                                 <?= Yii::$app->user->isGuest?'Not Login':Yii::$app->user->getIdentity()->username ?>
                                 <small><?=Yii::$app->user->isGuest?'':Yii::$app->user->getIdentity()->role->name?></small>

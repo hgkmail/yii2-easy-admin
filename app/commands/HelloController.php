@@ -12,6 +12,7 @@ use app\base\Walker;
 use app\commands\misc\MyWalker;
 use app\commands\misc\TreeNode;
 use app\models\Menu;
+use app\models\NavMenu;
 use app\models\Role;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -132,5 +133,43 @@ class HelloController extends Controller
     public function actionTimeAgo()
     {
         echo TimeAgoUtil::time_elapsed_string('@1529488054')."\n";
+    }
+
+    public function actionPathInfo()
+    {
+        $name = "/home/coderkim/Desktop/study-php/yii2-easy-admin/app/hello.txt";
+        echo "base: ".pathinfo($name, PATHINFO_BASENAME)."\n";   // base: hello.txt
+        echo "dir: ".pathinfo($name, PATHINFO_DIRNAME)."\n";     // dir: /home/coderkim/Desktop/study-php/yii2-easy-admin/app
+        echo "ext: ".pathinfo($name, PATHINFO_EXTENSION)."\n";   // ext: txt
+        echo "file: ".pathinfo($name, PATHINFO_FILENAME)."\n";   // file: hello
+        echo "relative: ".substr($name, strpos($name, "/app/"))."\n";
+    }
+
+    public function actionMime()
+    {
+        echo mime_content_type(
+            '/home/coderkim/Desktop/study-php/yii2-easy-admin/app/web/upload/post/php_5b3a6ecccc13d.jpg')."\n";
+        echo mime_content_type('/home/coderkim/Desktop/nginx-1.14.0.tar.gz')."\n";
+    }
+
+    public function actionImageSize()
+    {
+        $fn = '/home/coderkim/Desktop/study-php/yii2-easy-admin/app/web/upload/post/php_5b3a6ecccc13d.jpg';
+        $info = [];
+        $result = getimagesize($fn, $info);
+        var_dump($result);
+        var_dump($info);
+    }
+
+    // json type(db) => array(yii2)
+    public function actionJsonType()
+    {
+        $menu = new NavMenu();
+        $menu->name="aaa";
+        $menu->location = "bbb";
+        $menu->status = NavMenu::STATUS_ENABLED;
+        $menu->created_at = $menu->updated_at = time();
+        $menu->item_tree = [['id' => 100, 'children' => []], ['id' => 10], ['id' => 50]];
+        $menu->save();
     }
 }

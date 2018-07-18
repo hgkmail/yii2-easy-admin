@@ -34,7 +34,8 @@
         "fabpot/goutte": "^3.2",
         "workerman/workerman": "^3.5",
         "react/event-loop": "^0.5.2",
-        "react/http": "^0.8.3"
+        "react/http": "^0.8.3",
+        "mero/yii2-monolog": "^0.1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

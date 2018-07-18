@@ -16,7 +16,7 @@ class LoginFilter extends ActionFilter
 {
     public function afterAction($action, $result)
     {
-        if(!Yii::$app->user->getIsGuest()) {
+        if(Yii::$app->request->isPost && !Yii::$app->user->getIsGuest()) {
             $log = OperationLog::withDefault();
             $log->user_id = Yii::$app->getUser()->getId();
             $username = Yii::$app->getUser()->getIdentity()->username;

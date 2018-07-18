@@ -37,8 +37,8 @@ use yii\bootstrap\Html;
                             'model' => $model,
                             'allTags' => $allTags,
                             'allCats' => $allCats,
-                            'hasTags' => $hasTags,
-                            'hasCats' => $hasCats,
+                            'hasTags' => isset($hasTags)?$hasTags:[],
+                            'hasCats' => isset($hasCats)?$hasCats:[],
                         ]) ?>
                     </div>
                 </div>

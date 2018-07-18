@@ -12,6 +12,8 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'language' => 'zh-CN',
+    'timezone' => 'Asia/Shanghai',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -38,6 +40,23 @@ $config = [
         ],
         'optionService' => [
             'class' => '\app\services\OptionService'
+        ],
+    ],
+    'components' => [
+        'monolog' => [
+            'class' => '\Mero\Monolog\MonologComponent',
+            'channels' => [
+                'main' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/main_' . date('Y-m-d') . '.log',
+                            'level' => 'debug'
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+            ],
         ],
     ],
     'params' => $params,

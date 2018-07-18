@@ -14,6 +14,7 @@ use app\commands\misc\TreeNode;
 use app\models\Menu;
 use app\models\NavMenu;
 use app\models\Role;
+use Yii;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\helpers\ArrayHelper;
@@ -44,7 +45,7 @@ class HelloController extends Controller
     {
         // aaa 111
         // qqq 111
-        \Yii::$app->get('userService')->register($username, $email, $password);
+        Yii::$app->get('userService')->register($username, $email, $password);
         return ExitCode::OK;
     }
 
@@ -68,7 +69,7 @@ class HelloController extends Controller
 
     public function actionAuth()
     {
-        $auth = \Yii::$app->authManager;
+        $auth = Yii::$app->authManager;
         $assigns = $auth->getRolesByUser(2);
         var_dump($assigns);
     }
@@ -96,13 +97,13 @@ class HelloController extends Controller
         $arr[1]='zzz';    // this is push! php only have assoc array, even an ordinary array.
         $arr[0]='aaa';
         var_dump($arr);
-        echo \Yii::getAlias('@app')."\n";
+        echo Yii::getAlias('@app')."\n";
     }
 
     public function actionRand()
     {
         echo uniqid('file_')."\n";
-        echo \Yii::$app->getSecurity()->generateRandomString(6)."\n";
+        echo Yii::$app->getSecurity()->generateRandomString(6)."\n";
     }
 
     public function actionString()
@@ -114,7 +115,7 @@ class HelloController extends Controller
     public function actionMenu()
     {
         /* @var $mainMenuService \app\services\MainMenuService */
-        $mainMenuService = \Yii::$app->get('mainMenuService');
+        $mainMenuService = Yii::$app->get('mainMenuService');
         $top = Menu::find()->where(['id' => 2])->one();
 
         $child1 = $mainMenuService->getChildren([$top]);
@@ -171,5 +172,17 @@ class HelloController extends Controller
         $menu->created_at = $menu->updated_at = time();
         $menu->item_tree = [['id' => 100, 'children' => []], ['id' => 10], ['id' => 50]];
         $menu->save();
+    }
+
+    public function actionLog()
+    {
+//        error_log(print_r(Yii::$app->db));
+//        error_log("test log\n", 3,
+//            Yii::getAlias('runtime')."/logs/my.log");
+//        file_put_contents('php://stderr', "test log\n");
+//        file_put_contents(Yii::getAlias('runtime')."/logs/my.log", "test log\n", FILE_APPEND);
+        /* @var $monologComp \Mero\Monolog\MonologComponent */
+        $monologComp = Yii::$app->monolog;
+        $monologComp->getLogger()->info('hello monolog');
     }
 }

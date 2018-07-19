@@ -6,24 +6,28 @@ services:
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./config/db_docker.php:/app/config/db.php:delegated
+      - ./config/redis_docker.php:/app/config/redis.php:delegated
     networks:
       - yea_net
     ports:
       - '8001:80'
     depends_on:
       - mysql
+      - redis
   php2:
     image: "yea_fpm:latest"
     container_name: php2
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./config/db_docker.php:/app/config/db.php:delegated
+      - ./config/redis_docker.php:/app/config/redis.php:delegated
     networks:
       - yea_net
     ports:
       - '8002:80'
     depends_on:
       - mysql
+      - redis
   mysql:
     image: "mysql:5.7.22"
     container_name: mysql
@@ -35,9 +39,19 @@ services:
       - "3309:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
+  redis:
+    image: "redis:4.0.10"
+    container_name: redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - yea_net
+    ports:
+      - "6379:6379"
 
 volumes:
   yea_mysql_data:
+  redis_data:
 
 networks:
   yea_net:

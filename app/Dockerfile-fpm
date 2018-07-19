@@ -1,0 +1,6 @@
+FROM dmstr/php-yii2:7.2-fpm-4.5-nginx
+ADD . /app
+WORKDIR /app
+RUN chmod -R 777 runtime & chmod -R 777 web
+RUN composer dump-autoload -o
+

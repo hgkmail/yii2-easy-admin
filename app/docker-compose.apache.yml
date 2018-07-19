@@ -1,7 +1,7 @@
 version: '3'
 services:
   php1:
-    image: "yea_fpm:latest"
+    build: .
     container_name: php1
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
@@ -13,7 +13,7 @@ services:
     depends_on:
       - mysql
   php2:
-    image: "yea_fpm:latest"
+    build: .
     container_name: php2
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated

@@ -98,6 +98,7 @@ class OperationLog extends ActiveRecord
         $log->ip = Yii::$app->request->getUserIP();
         $log->path = Yii::$app->request->getPathInfo();
         $log->method = Yii::$app->request->method;
+        $log->created_at = time();
 
         $_csrf = $_REQUEST['_csrf'];
         unset($_REQUEST['_csrf']);
@@ -105,5 +106,21 @@ class OperationLog extends ActiveRecord
         $_REQUEST['_csrf'] = $_csrf;
 
         return $log;
+    }
+
+    public function saveToLog()
+    {
+        /* @var $monologComp \Mero\Monolog\MonologComponent */
+        $monologComp = Yii::$app->monolog;
+        $arr = [
+            'user_id' => $this->user_id,
+            'created_at' => Yii::$app->formatter->asDatetime($this->created_at),
+            'ip' => $this->ip,
+            'desc' => $this->description,
+            'method' => $this->method,
+            'path' => $this->path,
+            'input' => $this->input,
+        ];
+        $monologComp->getLogger('op')->info(print_r($arr, true));
     }
 }

@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$redis = require __DIR__.'/redis.php';
 
 $config = [
     'id' => 'basic',
@@ -17,9 +18,6 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'JybFpZXMaQNoT9f0197C7xog0F4-NCqL',
-        ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
         ],
         'user' => [
 //            'identityClass' => 'app\models\StaticUser',
@@ -54,6 +52,14 @@ $config = [
             ],
         ],
         'db' => $db,
+        'redis' => $redis,
+        'cache' => [
+            'class' => \yii\redis\Cache::class
+        ],
+        'session' => [
+            'name' => 'yii2-easy-admin',
+            'class' => \yii\redis\Session::class
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => true,
@@ -94,6 +100,31 @@ $config = [
                     'class' => '\yii\authclient\clients\GitHub',
                     'clientId' => '870219688d7d5d1a7b92',
                     'clientSecret' => '431e7d43f033633892585da00cf24f337a3c592f',
+                ],
+            ],
+        ],
+        'monolog' => [
+            'class' => '\Mero\Monolog\MonologComponent',
+            'channels' => [
+                'main' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/main_' . date('Y-m-d') . '.log',
+                            'level' => 'debug'
+                        ]
+                    ],
+                    'processor' => [],
+                ],
+                'op' => [
+                    'handler' => [
+                        [
+                            'type' => 'stream',
+                            'path' => '@app/runtime/logs/op_' . date('Y-m-d') . '.log',
+                            'level' => 'info'
+                        ]
+                    ],
+                    'processor' => [],
                 ],
             ],
         ],

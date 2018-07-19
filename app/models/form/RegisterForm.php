@@ -95,7 +95,7 @@ class RegisterForm extends Model
         $log = OperationLog::withDefault();
         $log->user_id = $user->id;
         $log->description = "User $user->username registers.";
-        $log->save();
+        $log->saveToLog();
 
         return $user;
     }

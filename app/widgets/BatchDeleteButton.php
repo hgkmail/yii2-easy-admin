@@ -33,7 +33,7 @@ class BatchDeleteButton extends Widget
         $js = <<<JS
 $('#$this->id').click(function() {
   var keys = $('$this->gridId').yiiGridView('getSelectedRows');
-  var url = '$this->action?';
+  var url = '/index.php{$this->action}?';
   for (var i in keys) {
       if (i!==0)
           url += '&';

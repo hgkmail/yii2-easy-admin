@@ -35,7 +35,8 @@
         "workerman/workerman": "^3.5",
         "react/event-loop": "^0.5.2",
         "react/http": "^0.8.3",
-        "mero/yii2-monolog": "^0.1.2"
+        "mero/yii2-monolog": "^0.1.2",
+        "yiisoft/yii2-redis": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

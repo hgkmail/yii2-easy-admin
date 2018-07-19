@@ -21,7 +21,7 @@ class LoginFilter extends ActionFilter
             $log->user_id = Yii::$app->getUser()->getId();
             $username = Yii::$app->getUser()->getIdentity()->username;
             $log->description = "User $username is logged in.";
-            $log->save();
+            $log->saveToLog();
         }
 
         return parent::afterAction($action, $result);

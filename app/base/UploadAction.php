@@ -25,7 +25,13 @@ class UploadAction extends Action
 
     private function asError($code, $msg, $extra=[])
     {
-        return $this->controller->asJson(['code' => $code, 'msg' => $msg, 'extra' => $extra]);
+        $arr = ['code' => $code, 'msg' => $msg, 'extra' => $extra];
+
+        /* @var $monologComp \Mero\Monolog\MonologComponent */
+        $monologComp = Yii::$app->monolog;
+        $monologComp->getLogger('main')->debug(print_r($arr, true));
+
+        return $this->controller->asJson($arr);
     }
 
     /**

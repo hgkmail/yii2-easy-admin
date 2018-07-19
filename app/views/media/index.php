@@ -90,6 +90,7 @@ uploader.bind('FileUploaded', function(uploader, file, result) {
             return;
         } 
     }
+    console.log('FileUploaded', file, result);
     alert('upload fail');
 });
 uploader.bind('FilesAdded', function(up, files) {

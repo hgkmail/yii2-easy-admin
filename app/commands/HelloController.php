@@ -181,6 +181,7 @@ class HelloController extends Controller
 //            Yii::getAlias('runtime')."/logs/my.log");
 //        file_put_contents('php://stderr', "test log\n");
 //        file_put_contents(Yii::getAlias('runtime')."/logs/my.log", "test log\n", FILE_APPEND);
+        
         /* @var $monologComp \Mero\Monolog\MonologComponent */
         $monologComp = Yii::$app->monolog;
         $monologComp->getLogger()->info('hello monolog');

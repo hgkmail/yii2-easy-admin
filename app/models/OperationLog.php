@@ -100,11 +100,12 @@ class OperationLog extends ActiveRecord
         $log->method = Yii::$app->request->method;
         $log->created_at = time();
 
-        $_csrf = $_REQUEST['_csrf'];
-        unset($_REQUEST['_csrf']);
-        $log->input = json_encode($_REQUEST);
-        $_REQUEST['_csrf'] = $_csrf;
-
+        if(isset($_REQUEST['_csrf'])) {
+            $_csrf = $_REQUEST['_csrf'];
+            unset($_REQUEST['_csrf']);
+            $log->input = json_encode($_REQUEST);
+            $_REQUEST['_csrf'] = $_csrf;
+        }
         return $log;
     }
 

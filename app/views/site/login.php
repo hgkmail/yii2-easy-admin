@@ -17,6 +17,11 @@ $fieldOptions2 = [
     'options' => ['class' => 'form-group has-feedback'],
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
+
+$fieldOptions3 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputTemplate' => "{input}<span class='form-control-feedback'></span>"
+];
 ?>
 
 <div class="login-box">
@@ -32,12 +37,21 @@ $fieldOptions2 = [
         <?= $form
             ->field($model, 'username', $fieldOptions1)
             ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+            ->textInput(['placeholder' => $model->getAttributeLabel('username')])
+        ?>
 
         <?= $form
             ->field($model, 'password', $fieldOptions2)
             ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')])
+        ?>
+
+        <?= $form
+            ->field($model, 'verifyCode', $fieldOptions3)
+            ->label(false)
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('verifyCode')])
+            ->widget(\yii\captcha\Captcha::class)
+        ?>
 
         <div class="row">
             <div class="col-xs-8">
@@ -55,10 +69,10 @@ $fieldOptions2 = [
 
         <div class="social-auth-links text-center">
             <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in
-                using Facebook</a>
-            <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Sign
-                in using Google+</a>
+            <?= yii\authclient\widgets\AuthChoice::widget([
+                'baseAuthUrl' => ['site/auth'],
+                'popupMode' => false,
+            ]) ?>
         </div>
         <!-- /.social-auth-links -->
 

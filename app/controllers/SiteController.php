@@ -10,6 +10,7 @@ use app\base\UploadAction;
 use app\models\form\MenuTreeNode;
 use app\models\form\RegisterForm;
 use app\models\Menu;
+use app\models\Stat;
 use app\services\MainMenuService;
 use app\widgets\MainMenu;
 use Yii;
@@ -75,6 +76,8 @@ class SiteController extends Controller
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'minLength' => 3,
+                'maxLength' => 3,
             ],
             'grid-setting' => [
                 'class' => 'app\base\GridSettingAction',
@@ -96,7 +99,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        Stat::checkUpdate();
+        $allStat = Stat::find()->all();
+        $statMap = [];
+        foreach ($allStat as $stat) {
+            $statMap[$stat->item]=$stat->result;
+        }
+        return $this->render('index', [
+            'statMap' => $statMap,
+        ]);
     }
 
     /**
@@ -235,6 +246,7 @@ class SiteController extends Controller
     }
 
     /** receive a code */
+    /** /site/auth (old) */
     public function actionCallback()
     {
         $code = Yii::$app->request->get('code');

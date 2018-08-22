@@ -41,8 +41,6 @@ $config = [
         'optionService' => [
             'class' => '\app\services\OptionService'
         ],
-    ],
-    'components' => [
         'monolog' => [
             'class' => '\Mero\Monolog\MonologComponent',
             'channels' => [

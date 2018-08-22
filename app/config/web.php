@@ -6,6 +6,7 @@ $redis = require __DIR__.'/redis.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'Yii Easy Admin',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -18,6 +19,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'JybFpZXMaQNoT9f0197C7xog0F4-NCqL',
+            'parsers' => [
+                'application/json' => \yii\web\JsonParser::class,
+            ],
         ],
         'user' => [
 //            'identityClass' => 'app\models\StaticUser',
@@ -64,6 +68,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => true,
             'rules' => [
+                ['class' => \yii\rest\UrlRule::class, 'controller' => 'v1/user'],
+                ['class' => \yii\rest\UrlRule::class, 'controller' => 'v1/role'],
+                ['class' => \yii\rest\UrlRule::class, 'controller' => 'v1/post'],
             ],
         ],
         'view' => [

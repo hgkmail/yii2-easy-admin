@@ -110,6 +110,30 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasOne(UserProfile::class, ['user_id' => 'id'])->inverseOf('user');
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getOpenAuths()
+    {
+        return $this->hasMany(OpenAuth::class, ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getComments()
+    {
+        return $this->hasMany(Comment::class, ['user_id' => 'id'])->inverseOf('user');
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getLikes()
+    {
+        return $this->hasMany(Like::class, ['user_id' => 'id'])->inverseOf('user');
+    }
+
     /************************* IdentityInterface methods *************************/
 
     /**

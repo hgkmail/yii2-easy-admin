@@ -3,7 +3,7 @@ modules:
     enabled:
         - WebDriver:
             url: http://127.0.0.1:8080/
-            browser: firefox
+            browser: chrome    # firefox web driver has bug with codeception and python
         - Yii2:
             part: orm
             entryScript: index-test.php

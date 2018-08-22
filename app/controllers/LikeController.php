@@ -2,29 +2,20 @@
 
 namespace app\controllers;
 
-use app\models\form\MenuTreeNode;
-use app\services\MainMenuService;
+use app\models\Post;
+use app\models\User;
 use Yii;
-use app\models\Menu;
-use app\models\search\MenuSearch;
+use app\models\Like;
+use app\models\search\LikeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MenuController implements the CRUD actions for Menu model.
+ * LikeController implements the CRUD actions for Like model.
  */
-class MenuController extends Controller
+class LikeController extends Controller
 {
-    /* @var $mainMenuService MainMenuService */
-    public $mainMenuService;
-
-    public function init()
-    {
-        parent::init();
-        $this->mainMenuService = Yii::$app->get('mainMenuService');
-    }
-
     /**
      * @inheritdoc
      */
@@ -32,7 +23,7 @@ class MenuController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::class,
+                'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -41,12 +32,12 @@ class MenuController extends Controller
     }
 
     /**
-     * Lists all Menu models.
+     * Lists all Like models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MenuSearch();
+        $searchModel = new LikeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -56,7 +47,7 @@ class MenuController extends Controller
     }
 
     /**
-     * Displays a single Menu model.
+     * Displays a single Like model.
      * @param integer $id
      * @return mixed
      */
@@ -68,27 +59,29 @@ class MenuController extends Controller
     }
 
     /**
-     * Creates a new Menu model.
+     * Creates a new Like model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Menu();
-        $menus = Menu::find()->all();
+        $model = new Like();
+        $posts = Post::find()->all();
+        $users = User::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'menus' => $menus,
+                'posts' => $posts,
+                'users' => $users,
             ]);
         }
     }
 
     /**
-     * Updates an existing Menu model.
+     * Updates an existing Like model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -96,72 +89,43 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $menus = Menu::find()->where('id!=:id', [':id' => $id])->all();
+        $posts = Post::find()->all();
+        $users = User::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
-                'menus' => $menus,
+                'posts' => $posts,
+                'users' => $users,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Menu model.
+     * Deletes an existing Like model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $menu = $this->findModel($id);
-        $grandChildren = $this->mainMenuService->getGrandchildren([$menu]);
+        $this->findModel($id)->delete();
 
-        $menu->delete();
-        foreach ($grandChildren as $grandChild) {
-            $grandChild->delete();
-        }
-
-        return $this->redirect(['index']);
-    }
-
-    public function actionMoveUp()
-    {
-        $id = Yii::$app->request->get('id');
-        $menu = $this->findModel($id);
-        $this->mainMenuService->move($menu, -1);
-
-        return $this->redirect(['index']);
-    }
-
-    public function actionMoveDown()
-    {
-        $id = Yii::$app->request->get('id');
-        $menu = $this->findModel($id);
-        $this->mainMenuService->move($menu, 1);
-
-        return $this->redirect(['index']);
-    }
-
-    public function actionSync()
-    {
-        $this->mainMenuService->clearUserMenuCache();
-        $this->mainMenuService->putUserMenuCache();
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Menu model based on its primary key value.
+     * Finds the Like model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Menu the loaded model
+     * @return Like the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Menu::findOne($id)) !== null) {
+        if (($model = Like::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

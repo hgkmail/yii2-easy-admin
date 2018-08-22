@@ -1,53 +1,72 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $statMap array */
 
-$this->title = 'My Yii Application';
+use app\widgets\SmallBoxWidget;
+
+$this->title = 'Dashboard ( update per hour )';
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
+<div class="site-index container-fluid">
+    <div class="site-stat row">
+        <div class="col-md-3">
+            <?= SmallBoxWidget::widget([
+                'number'=>$statMap['total-user'],
+                'title'=>'Users',
+                'moreButton'=>['label'=>'More info', 'url'=>'/user/index'],
+                'icon'=>'fa fa-user',
+                'color'=>'bg-green',
+            ]) ?>
         </div>
-
+        <div class="col-md-3">
+            <?= SmallBoxWidget::widget([
+                'number'=>$statMap['total-role'],
+                'title'=>'Roles',
+                'moreButton'=>['label'=>'More info', 'url'=>'/role/index'],
+                'icon'=>'fa fa-users',
+                'color'=>'bg-yellow',
+            ]) ?>
+        </div>
+        <div class="col-md-3">
+            <?= SmallBoxWidget::widget([
+                'number'=>$statMap['total-menu'],
+                'title'=>'Menus',
+                'moreButton'=>['label'=>'More info', 'url'=>'/menu/index'],
+                'icon'=>'fa fa-navicon',
+                'color'=>'bg-aqua',
+            ]) ?>
+        </div>
+        <div class="col-md-3">
+            <?= SmallBoxWidget::widget([
+                'number'=>$statMap['total-feedback'],
+                'title'=>'Feedbacks',
+                'moreButton'=>['label'=>'More info', 'url'=>'/feedback/index'],
+                'icon'=>'fa fa-comment',
+                'color'=>'bg-red',
+            ]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>REST API Endpoints</h4>
+            <pre>User: /v1/users</pre>
+            <pre>Role: /v1/roles</pre>
+            <pre>Post: /v1/posts</pre>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Open Auth</h4>
+            <?= yii\authclient\widgets\AuthChoice::widget([
+                'baseAuthUrl' => ['site/auth'],
+                'popupMode' => false,
+            ]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>TODO</h4>
+            <p>graph ( by time ), calendar, quick editor, chatbox, etc.</p>
+        </div>
     </div>
 </div>

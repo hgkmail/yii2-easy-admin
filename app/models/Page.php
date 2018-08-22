@@ -2,27 +2,30 @@
 
 namespace app\models;
 
+use app\base\TreeModelTrait;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "{{%post}}".
+ * This is the model class for table "{{%page}}".
  *
  * @property int $id
  * @property string $title
  * @property string $content
  * @property string $cover
- * @property int $commentStatus
  * @property int $status
  * @property int $visibility
  * @property int $author_id
  * @property int $created_at
  * @property int $updated_at
- *
+ * @property int $parent_id
+ * @property int $order
  */
-class Post extends ActiveRecord
+class Page extends ActiveRecord
 {
+    use TreeModelTrait;
+
     const STATUS_DRAFT = 1;              // draft
     const STATUS_PENDING_REVIEW = 2;     // pending review
     const STATUS_PUBLISH = 3;            // publish
@@ -30,15 +33,21 @@ class Post extends ActiveRecord
     const VISIBILITY_PUBLIC = 1;         // public
     const VISIBILITY_PRIVATE = 2;        // private
 
-    const COMMENT_OPEN = 1;              // open comment
-    const COMMENT_CLOSE = 2;             // close comment
+    public $children = [];   // for display
 
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return '{{%post}}';
+        return '{{%page}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class
+        ];
     }
 
     /**
@@ -47,17 +56,11 @@ class Post extends ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'author_id'], 'required'],
             [['content'], 'string'],
-            [['commentStatus', 'status', 'visibility', 'author_id', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'visibility', 'author_id', 'created_at', 'updated_at', 'parent_id', 'order'], 'integer'],
             [['title', 'cover'], 'string', 'max' => 255],
-            [['title'], 'required'],
-        ];
-    }
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::class
+            [['parent_id', 'order'], 'default', 'value' => 0],
         ];
     }
 
@@ -71,30 +74,23 @@ class Post extends ActiveRecord
             'title' => Yii::t('app', 'Title'),
             'content' => Yii::t('app', 'Content'),
             'cover' => Yii::t('app', 'Cover'),
-            'commentStatus' => Yii::t('app', 'Comment Status'),
             'status' => Yii::t('app', 'Status'),
             'visibility' => Yii::t('app', 'Visibility'),
-            'author_id' => Yii::t('app', 'Author ID'),
+            'author_id' => Yii::t('app', 'Author'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
+            'parent_id' => Yii::t('app', 'Parent'),
+            'order' => Yii::t('app', 'Order'),
         ];
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * {@inheritdoc}
+     * @return PageQuery the active query used by this AR class.
      */
-    public function getTags()
+    public static function find()
     {
-        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->viaTable('{{%tag_post}}', ['post_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategories()
-    {
-        return $this->hasMany(Category::class, ['id' => 'category_id'])->viaTable('{{%category_post}}',
-            ['post_id' => 'id']);
+        return new PageQuery(get_called_class());
     }
 
     /**
@@ -103,30 +99,5 @@ class Post extends ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::class, ['id' => 'author_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getComments()
-    {
-        return $this->hasMany(Comment::class, ['post_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLikes()
-    {
-        return $this->hasMany(Like::class, ['post_id' => 'id']);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @return PostQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new PostQuery(get_called_class());
     }
 }

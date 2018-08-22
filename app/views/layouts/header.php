@@ -33,7 +33,7 @@ $this->registerJs($js_body_begin, View::POS_BEGIN);
 
 <header class="main-header">
 
-    <?= Html::a('<span class="logo-mini">APP1</span><span class="logo-lg">' . Yii::$app->name.'1'. '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+    <?= Html::a('<span class="logo-mini">YEA</span><span class="logo-lg">' . Yii::$app->name.'</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
 

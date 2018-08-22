@@ -96,7 +96,7 @@ uploader.bind('FileUploaded', function(uploader, file, result) {
     var index = uploadIndex[file.id];
     var res = JSON.parse(result.response);
     if(index===0) {   // cover
-        $('#post-cover').val(res.data);
+        $('#post-cover').val(res.data); 
     }
 });
 uploader.bind('UploadComplete', function(uploader) {

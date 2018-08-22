@@ -13,6 +13,7 @@ use app\commands\misc\MyWalker;
 use app\commands\misc\TreeNode;
 use app\models\Menu;
 use app\models\NavMenu;
+use app\models\Page;
 use app\models\Role;
 use Yii;
 use yii\console\Controller;
@@ -181,9 +182,30 @@ class HelloController extends Controller
 //            Yii::getAlias('runtime')."/logs/my.log");
 //        file_put_contents('php://stderr', "test log\n");
 //        file_put_contents(Yii::getAlias('runtime')."/logs/my.log", "test log\n", FILE_APPEND);
-        
+
         /* @var $monologComp \Mero\Monolog\MonologComponent */
         $monologComp = Yii::$app->monolog;
         $monologComp->getLogger()->info('hello monolog');
     }
+
+    public function actionDynamicAttr()
+    {
+        $attr = "children";
+        $cls1 = new Class1();
+        $cls1->$attr[1]="a";
+        $cls1->$attr[2]="b";
+        echo count($cls1->$attr)."\n";
+    }
+
+    public function actionTreeTrait()
+    {
+        $top = Page::convertTree(Page::find()->all());
+        var_dump($top);
+    }
+}
+
+class Class1
+{
+    /** @var array */
+    public $children=[];
 }

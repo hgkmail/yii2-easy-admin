@@ -1,10 +1,8 @@
 # yii2-easy-admin
-
 <img src="logo.png?raw=true" alt="yii2-easy-admin" width="120" height="120"/>
-
 Build a full-featured administrative interface in 10 minutes.
 
-## screenshots
+## screenshots (click to view detail) 
 <p float="left">
   <img src="screenshots/dashboard.png?raw=true" alt="dashboard.png" width="180" height="90"/>
   <img src="screenshots/menus.png?raw=true" alt="menus.png" width="180" height="90"/>

@@ -15,7 +15,7 @@ Build a full-featured administrative interface in 10 minutes.
 
 ## UML
 Download and open with StarUML.
-* [models.mdj](models.mdj)
+* [models.mdj](models.mdj?raw=true)
 
 ## Features
 * Dashboard

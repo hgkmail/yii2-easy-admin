@@ -13,6 +13,20 @@ Build a full-featured administrative interface in 10 minutes.
   <img src="screenshots/role-edit.png?raw=true" alt="role-edit.png" width="180" height="90"/>
 </p>
 
+## UML
+Please open with StarUML.
+[models.mdj](models.mdj)
+
+## Features
+* Dashboard
+* Users
+* Roles
+* Menus
+* CMS (Category, Tag, Post, Page, Comment, Like, Media Library, Navigation Menu) 
+* InMails
+* REST API
+* OAuth2 Login
+
 ## Getting Started
 
 This project has been tested in Ubuntu only, so it's recommended to deploy in Linux.
@@ -85,9 +99,12 @@ TBD
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
 
 ## Acknowledgments
 
 * Inspiration
-[laravel-admin](https://github.com/z-song/laravel-admin)
+<p>
+    [laravel-admin](https://github.com/z-song/laravel-admin)
+</p>
+

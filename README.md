@@ -15,77 +15,73 @@ Build a full-featured administrative interface in 10 minutes.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+This project has been tested in Ubuntu only, so it's recommended to deploy in Linux.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+This project depends on PHP 7.0+, composer, Yii 2, MySQL and Redis.
 
 ```
-Give examples
+sudo apt-get install php    
+...
 ```
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Clone the project
 
 ```
-Give the example
+git clone https://github.com/hgkmail/yii2-easy-admin.git
 ```
 
-And repeat
+Use composer to install dependencies
 
 ```
-until finished
+composer install
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+According to your local environment, modify "app/config/web.php", "app/config/db.php" and "app/config/redis.php". Then make migrations to MySQL and run app.
+
+```
+cd app
+php yii migrate
+php yii serve
+```
+
+Open http://localhost:8080/index.php, then you will see the dashboard page.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+TBD
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+You can also deploy this project with docker.
+
+```
+cd app
+sudo docker-compose up -f docker-compose.apache.yml
+```
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Yii 2](https://github.com/yiisoft/yii2) - The web framework used
+* [Composer](https://github.com/composer/composer) - Dependency Management
+* [AdminLTE](https://github.com/almasaeed2010/AdminLTE) - UI Theme
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Just fork and modify the project, submitting pull requests is welcome.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+TBD
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Guokai Huang** - *Initial work* - [Guokai Huang](https://github.com/hgkmail)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+TBD
 
 ## License
 
@@ -93,6 +89,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
 * Inspiration
-* etc
+[laravel-admin](https://github.com/z-song/laravel-admin)

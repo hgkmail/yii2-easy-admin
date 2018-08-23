@@ -14,8 +14,8 @@ Build a full-featured administrative interface in 10 minutes.
 </p>
 
 ## UML
-Please open with StarUML.
-[models.mdj](models.mdj)
+Download and open with StarUML.
+* [models.mdj](models.mdj)
 
 ## Features
 * Dashboard
@@ -87,24 +87,16 @@ sudo docker-compose up -f docker-compose.apache.yml
 
 Just fork and modify the project, submitting pull requests is welcome.
 
-## Versioning
-
-TBD
-
 ## Authors
 
 * **Guokai Huang** - *Initial work* - [Guokai Huang](https://github.com/hgkmail)
 
-TBD
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
-* Inspiration
-<p>
-    [laravel-admin](https://github.com/z-song/laravel-admin)
-</p>
+Inspiration
+* [laravel-admin](https://github.com/z-song/laravel-admin)
 

@@ -1,13 +1,19 @@
 # yii2-easy-admin
 
-<img src="logo.png" alt="yii2-easy-admin" width="120" height="120"/>
+<img src="logo.png?raw=true" alt="yii2-easy-admin" width="120" height="120"/>
 
 Build a full-featured administrative interface in 10 minutes.
 
 ## screenshots
-<img src="screenshots/menus.png" alt="menus.png" width="200" height="90"/>
-<img src="screenshots/post-edit-2.png" alt="post-edit-2.png" width="200" height="90"/>
-<img src="screenshots/media.png" alt="media.png" width="200" height="90"/>
+<p float="left">
+  <img src="screenshots/dashboard.png?raw=true" alt="dashboard.png" width="180" height="90"/>
+  <img src="screenshots/menus.png?raw=true" alt="menus.png" width="180" height="90"/>
+  <img src="screenshots/post-edit-2.png?raw=true" alt="post-edit-2.png" width="180" height="90"/>
+  <img src="screenshots/post-edit-1.png?raw=true" alt="post-edit-1.png" width="180" height="90"/>
+  <img src="screenshots/media.png?raw=true" alt="media.png" width="180" height="90"/>
+  <img src="screenshots/nav-menu.png?raw=true" alt="nav-menu.png" width="180" height="90"/>
+  <img src="screenshots/role-edit.png?raw=true" alt="role-edit.png" width="180" height="90"/>
+</p>
 
 ## Getting Started
 
